@@ -1,0 +1,42 @@
+<div class="container">
+        <div class="row col-md-6 col-md-offset-2 custyle">
+                <a (click)="open()" class="btn btn-primary btn-xs pull-right"><b>+</b> Create new Commuter</a>
+        <table class="table table-striped custab">
+        
+        <thead>
+         
+        <tr>
+                <th>Name</th>
+                <th>DOB</th>
+                <th>Address</th>
+                <th>Contact Number</th>
+                <th>Driving License</th>
+                <th>Vehicle License</th>
+                <th>Driving License Expiry</th>
+            </tr>
+        </thead>
+                <tr *ngFor="let commuter of data.offenders | async">
+                        <td>{{ commuter.name}}</td>
+                        <td>{{commuter.dob}}</td>
+                        <td>{{commuter.address}}</td>
+                        <td>{{commuter.contact_number}}</td>
+                        <td>{{commuter.dl_no}}</td>
+                        <td>{{commuter.vehicle_plate}}</td>
+                        <td>{{commuter.dl_expiry}}</td>
+                          
+                </tr>
+        </table>
+        </div>
+    </div>
+
+    <bs-modal #myModal>
+            <bs-modal-header  [showDismiss]="true">
+                <h4 class="modal-title">Forgot Password</h4>
+                
+            </bs-modal-header>
+            <bs-modal-body>
+                      </bs-modal-body>
+            <bs-modal-footer [showDefaultButtons]="true"></bs-modal-footer>
+            
+        </bs-modal>
+          

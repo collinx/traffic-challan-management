@@ -1,0 +1,36 @@
+<div class="container">
+        <div class="row col-md-6 col-md-offset-2 custyle">
+                <a (click)="open()" class="btn btn-primary btn-xs pull-right"><b>+</b> Create new Offence</a>
+        <table class="table table-striped custab">
+        <thead>
+          
+                <tr>
+                        <th>Code</th>
+                        <th>Description</th>
+                        <th>Points</th>
+                        <th>Cost</th>
+                    </tr>
+                </thead>
+                        <tr *ngFor="let offence of data.offences | async">
+                                <td>{{offence.code}}</td>
+                                <td>{{offence.description}}</td>
+                                <td>{{offence.points}}</td>
+                                <td>{{offence.cost}}</td>
+                                                              
+                        </tr>
+        </table>
+        </div>
+    </div>
+
+
+    <bs-modal #myModal>
+            <bs-modal-header  [showDismiss]="true">
+                <h4 class="modal-title">Forgot Password</h4>
+                
+            </bs-modal-header>
+            <bs-modal-body>
+                      </bs-modal-body>
+            <bs-modal-footer [showDefaultButtons]="true"></bs-modal-footer>
+            
+        </bs-modal>
+          

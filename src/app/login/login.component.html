@@ -1,0 +1,27 @@
+ 
+  <div class="modal-dialog">
+  <div class="loginmodal-container">
+    <h1>Login to Your Account</h1><br>
+    <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate> 
+    <input type="text" name="email" [(ngModel)]="email" placeholder="Email" required>
+    <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required>
+    <button [disabled]="email == '' || password == ''" class="btn btn-primary">Login</button>
+    </form>
+    
+    <div class="login-help">
+    <a (click)="open()">Forgot Password</a>
+    </div>
+  </div>
+  </div>
+<footer>Use admin@gov.in as email and admin96 as password</footer>
+  <bs-modal #myModal>
+      <bs-modal-header  >
+          <h4 class="modal-title">Forgot Password</h4>
+      </bs-modal-header>
+      <bs-modal-body>
+          <input type="text" name="emailforgot" placeholder="Email" [(ngModel)]="emailforgot"> 
+          <input type="submit" name="submit"  value="Submit">
+      </bs-modal-body>
+      
+  </bs-modal>
+    

@@ -1,0 +1,50 @@
+<div class="container">
+    
+        <div class="row col-md-6 col-md-offset-2 custyle">
+                <a (click)="open()" class="btn btn-primary btn-xs pull-right"><b>+</b> Upload new Challan</a>
+        <table class="table table-striped custab">
+        <thead>
+        
+            <tr>
+                <th>Challan Number</th>
+                <th>Date</th>
+                <th>Location</th>
+                <th>Vehicle Number</th>
+                <th>License Number</th>
+                <th>Badge Number</th>
+                <th>Payment Due Date</th>
+                <th>Offence Code</th>
+                <th>Fine</th>
+            </tr>
+        </thead>
+                <tr *ngFor="let challan of data.challans | async">
+                        <td>{{ challan.challan_number}}</td>
+                        <td>{{challan.date}}</td>
+                        <td>{{challan.location}}</td>
+                        <td>{{challan.offender}}</td>
+                        <td>{{challan.offender}}</td>
+                        <td>{{challan.officer}}</td>
+                        <td>{{challan.payment_due_date}}</td>
+                        <td>{{challan.offence}}</td>
+                        <td>{{challan.location}}</td>  
+                </tr>
+        </table>
+        </div>
+    </div>
+
+    <bs-modal #myModal>
+            <bs-modal-header  [showDismiss]="true">
+                <h4 class="modal-title">Forgot Password</h4>
+                
+            </bs-modal-header>
+            <bs-modal-body>
+                    <input type="file" accept="image/*" (change)="onChange($event)"/>
+                    <br>
+                    <p style="text-align:center">OR</p>
+                    <br>
+                    <input type="url" name="webaddress" style="text-align:center" [(ngModel)]="webaddress" placeholder="www.google.com"/>  <button type="submit" (click)="submit()" >Submit</button>
+            </bs-modal-body>
+            <bs-modal-footer [showDefaultButtons]="true"></bs-modal-footer>
+            
+        </bs-modal>
+          

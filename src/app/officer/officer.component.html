@@ -1,0 +1,48 @@
+<div class="container">
+        <div class="row col-md-6 col-md-offset-2 custyle">
+                <a (click)="open()" class="btn btn-primary btn-xs pull-right"><b>+</b> Create new Officer</a>
+        <table class="table table-striped custab">
+        <thead>
+        
+           
+                <tr>
+                        <th>Name</th>
+                        <th>Badge Number</th>
+                        <th>Precinct</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                        <tr *ngFor="let officer of data.officers | async">
+                                <td>{{officer.name}}</td>
+                                <td>{{officer.badge_number}}</td>
+                                <td>{{officer.precinct}}</td>
+                                <td>{{officer.type}}</td>
+                                                              
+                        </tr>
+        </table>
+        </div>
+    </div>
+
+    
+    <bs-modal #myModal>
+            <bs-modal-header  [showDismiss]="true">
+                <h4 class="modal-title">Add Officer</h4>
+                
+            </bs-modal-header>
+            <bs-modal-body>
+                   Name:<br>
+                    <input type="text" name="name" [(ngModel)]="officer.name"><br>
+                   Badge Number:<br>
+                    <input type="text" name="badge_number" [(ngModel)]="officer.badge_number"> <br>
+                   Precinct:<br>
+                    <input type="text" name="precinct" [(ngModel)]="officer.precinct"><br>
+                   Type:<br>
+                    <input type="text" name="type" [(ngModel)]="officer.type"> 
+
+            </bs-modal-body>
+            <bs-modal-footer >
+                <button type="submit" class="btn-primary" (click)="data.addOfficer(officer)">Submit</button>
+            </bs-modal-footer>
+            
+        </bs-modal>
+          

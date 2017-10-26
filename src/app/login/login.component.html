@@ -1,4 +1,4 @@
- 
+<!--  
   <div class="modal-dialog">
   <div class="loginmodal-container">
     <h1>Login to Your Account</h1><br>
@@ -9,13 +9,14 @@
     </form>
     
     <div class="login-help">
-    <a (click)="open()">Forgot Password</a>
+    <a >Forgot Password</a>
+     <a (click)="open()">Forgot Password</a>  
     </div>
   </div>
   </div>
 <footer>Use admin@gov.in as email and admin96 as password</footer>
-  <bs-modal #myModal>
-      <bs-modal-header  >
+   <bs-modal #myModal>
+      <bs-modal-header>
           <h4 class="modal-title">Forgot Password</h4>
       </bs-modal-header>
       <bs-modal-body>
@@ -23,5 +24,87 @@
           <input type="submit" name="submit"  value="Submit">
       </bs-modal-body>
       
-  </bs-modal>
-    
+  </bs-modal>  
+     -->
+     		<!-- Header -->
+    <header id="header">
+      <nav class="left">
+        <a href="#menu"><span>Menu</span></a>
+      </nav>
+      <a href="/" class="logo">Traffic Challan Management</a>
+      <nav class="right">
+        <a routerLink="/login" class="button alt">Log in</a>
+      </nav>
+    </header>
+
+  <!-- Menu -->
+    <nav id="menu">
+      <ul class="links">
+        <li><a href="#banner">Home</a></li>
+        <li><a href="#one">About Us</a></li>
+        <li><a href="#footer">Contact Us</a></li>
+      </ul>
+      <ul class="actions vertical">
+        <li><a href="#" class="button fit">Log In</a></li>
+      </ul>
+    </nav>
+
+     <div class="cotn_principal" style="width:100%;height:100%;">
+      <div class="cont_centrar">
+      
+        <div class="cont_login">
+      <div class="cont_info_log_sign_up">
+            <div class="col_md_login">
+      <div class="cont_ba_opcitiy">
+              
+              <h2>Police</h2>  
+        <p>For Generating Challans</p> 
+        <button class="btn_login" onclick="cambiar_login()">Click Here</button>
+        </div>
+        </div>
+      <div class="col_md_sign_up">
+      <div class="cont_ba_opcitiy">
+        <h2>Commuter</h2>
+      
+        
+        <p>For Past History and Payment</p>
+      
+        <button class="btn_sign_up" onclick="cambiar_sign_up()">Click Here</button>
+      </div>
+        </div>
+             </div>
+      
+          
+          <div class="cont_back_info">
+             <div class="cont_img_back_grey">
+             <img src="../../assets/images/banner_traffic.jpg" alt="" />
+             </div>
+             
+          </div>
+      <div class="cont_forms" >
+          <div class="cont_img_back_">
+             <img src="../../assets/images/banner_traffic.jpg" alt="" />
+             </div>
+       <div class="cont_form_login">
+      <a   onclick="ocultar_login_sign_up()" class="back_fn"><i class="material-icons">&#xE5C4;</i></a>
+         <h2>LOGIN</h2>
+         <input type="email"    value="" placeholder="Email" />
+         <input type="password"     value="" placeholder="Password" />
+      <button class="btn_login"   onclick="cambiar_login()">LOGIN</button>
+        </div>
+        
+         <div class="cont_form_sign_up">
+      <a  onclick="ocultar_login_sign_up()"><i class="material-icons">&#xE5C4;</i></a>
+           <h2>SIGN UP</h2>
+           <input type="text" value="" placeholder="License Number" />
+           <h4>OR</h4>
+           <input type="text" value="" placeholder="Vehicle Number" />
+      <button class="btn_sign_up" onclick="cambiar_sign_up()">View</button>
+      
+        </div>
+      
+          </div>
+          
+        </div>
+       </div>
+      </div>

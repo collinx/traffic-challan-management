@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   email='';
   password='';
   emailforgot='';
- 
+  current='false';
   @ViewChild('myModal')
   modal: BsModalComponent;
 
@@ -40,6 +40,14 @@ login() {
   
    
    
+ }
+show(temp){
+ this.current=temp;
+}
+ hide( ){
+
+  this.current='false';
+
  }
 
   ngOnInit() {

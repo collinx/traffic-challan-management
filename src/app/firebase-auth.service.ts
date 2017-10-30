@@ -51,6 +51,19 @@ user;
           return false;
         }
       }
+      getUserType() {
+        
+            if (localStorage.getItem('type')) {
+        
+        
+              return JSON.parse(localStorage.getItem('type'));
+            } else {
+        
+        
+        
+              return false;
+            }
+          }
 
       logout() {
         this.af.auth.signOut();

@@ -55,7 +55,8 @@ const appRoutes: Routes = [
     OfficerComponent,
     OffenceComponent,
     LoginComponent,
-    LandingComponent
+    LandingComponent,
+     
   ],
   imports: [
     BrowserModule,
@@ -66,7 +67,8 @@ const appRoutes: Routes = [
     AngularFirestoreModule.enablePersistence(),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    BsModalModule
+    BsModalModule,
+    
   ],
   providers: [FirebaseAuthService,FirebaseDataService,GlobalDataService],
   bootstrap: [AppComponent]

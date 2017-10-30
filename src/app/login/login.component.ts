@@ -32,15 +32,28 @@ login() {
   this.auth.loginUser(this.email,this.password).then(data =>{
  if(data == true){
  
-  
- this.router.navigate(['/dashboard']);
- } 
-   });
- 
-  
-   
-   
+ if(this.email.includes("admin")){
+   localStorage.setItem("type","admin");
  }
+ else{
+   localStorage.setItem("type","police");
+ } 
+ this.router.navigate(['/dashboard']);
+ }else{
+   alert("Wrong Credentials.");
+ } 
+   }); 
+ }
+
+loginA(){
+  this.auth.loginAnonymous().then(data =>{
+    if(data == true){
+      localStorage.setItem("type","commuter");
+      this.router.navigate(['/dashboard']);
+    }
+  });
+}
+ 
 show(temp){
  this.current=temp;
 }

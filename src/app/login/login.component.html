@@ -33,20 +33,18 @@
       </nav>
       <a href="/" class="logo">Traffic Challan Management</a>
       <nav class="right">
-        <a routerLink="/login" class="button alt">Log in</a>
+        <a routerLink="/" class="button alt">Home</a>
       </nav>
     </header>
 
   <!-- Menu -->
     <nav id="menu">
       <ul class="links">
-        <li><a href="#banner">Home</a></li>
-        <li><a href="#one">About Us</a></li>
-        <li><a href="#footer">Contact Us</a></li>
+        <li><a routerLink="/">Home</a></li>
+        <li><a routerLink="/" href="#one">About Us</a></li>
+        <li><a routerLink="/" href="#footer">Contact Us</a></li>
       </ul>
-      <ul class="actions vertical">
-        <li><a href="#" class="button fit">Log In</a></li>
-      </ul>
+       
     </nav>
 
      <div class="cotn_principal" style="width:100%;height:100%;">
@@ -87,15 +85,15 @@
              </div>
        <div class="cont_form_login">
       <a   onclick="ocultar_login_sign_up()" class="back_fn"><i class="material-icons">&#xE5C4;</i></a>
-         <h2>LOGIN</h2>
-         <input type="email"    value="" placeholder="Email" />
-         <input type="password"     value="" placeholder="Password" />
-      <button class="btn_login"   onclick="cambiar_login()">LOGIN</button>
+         <h2>Police</h2>
+         <input type="email"  name="email" [(ngModel)]="email" placeholder="Email" required/>
+         <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required/>
+      <button class="btn_login" [disabled]="email == '' || password == ''"  (click)="login()">LOGIN</button>
         </div>
         
          <div class="cont_form_sign_up">
       <a  onclick="ocultar_login_sign_up()"><i class="material-icons">&#xE5C4;</i></a>
-           <h2>SIGN UP</h2>
+           <h2>Commuter</h2>
            <input type="text" value="" placeholder="License Number" />
            <h4>OR</h4>
            <input type="text" value="" placeholder="Vehicle Number" />

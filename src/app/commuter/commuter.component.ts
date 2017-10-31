@@ -3,8 +3,8 @@ import { GlobalDataService } from './../global-data.service';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Router } from '@angular/router';
 import { FirebaseAuthService } from './../firebase-auth.service';
-import { CHALLAN } from './../modules/mymodules';
-import { BsModalComponent } from 'ng2-bs3-modal';
+import { CHALLAN, COMMUTER } from './../modules/mymodules';
+import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 @Component({
@@ -15,13 +15,17 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 export class CommuterComponent implements OnInit {
 
   @ViewChild('myModal')
-  modal: BsModalComponent;
-   
-  
-   constructor(public auth: FirebaseAuthService ,public router:Router, public data:FirebaseDataService, public global:GlobalDataService   )  { 
-     
+  modal: ModalComponent;
+
+  commuter: COMMUTER;
+
+
+  constructor(public auth: FirebaseAuthService , public router: Router, public data: FirebaseDataService,
+    public global: GlobalDataService   )  {
+
+      this.commuter = new COMMUTER();
   }
-  
+
 
   ngOnInit() {
   }
@@ -29,6 +33,7 @@ export class CommuterComponent implements OnInit {
 
   close() {
     this.modal.close();
+    this.commuter = new COMMUTER();
 }
 
 open() {

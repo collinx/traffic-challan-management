@@ -5,7 +5,7 @@ export class OFFENCE {
     cost;
   }
 
-  export class OFFENDER {
+  export class COMMUTER {
     name;
     dl_no;
     dob;
@@ -19,28 +19,28 @@ export class OFFENCE {
     name;
     precinct;
     badge_number;
-    type;    
+    type;
  }
 
 export class CHALLAN {
-   date:Date;
-   location:String;
-   challan_number:number;
-   offence:number;
-   offender:string;
-   payment_due_date:Date;
-   status:string;
-   officer:string;
-   
+   date: Date;
+   location: String;
+   challan_number: number;
+   offence: number;
+   offender: string;
+   payment_due_date: Date;
+   status: string;
+   officer: string;
+
   }
 
- export class COURT{
+ export class COURT {
      court_date;
      is_warrant_issued;
      arrest_status;
- } 
+ }
 
- export class USER{
+ export class USER {
 
     email;
     password;

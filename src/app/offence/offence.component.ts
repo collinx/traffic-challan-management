@@ -16,12 +16,10 @@ export class OffenceComponent implements OnInit {
 
   @ViewChild('myModal')
   modal: BsModalComponent;
-   
-  
-   constructor(public auth: FirebaseAuthService ,public router:Router, public data:FirebaseDataService, public global:GlobalDataService   )  { 
-     
-  }
-  
+
+  constructor(public auth: FirebaseAuthService , public router: Router,
+    public data: FirebaseDataService, public global: GlobalDataService) {  }
+
 
   ngOnInit() {
   }

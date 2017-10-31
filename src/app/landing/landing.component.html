@@ -5,7 +5,10 @@
       </nav>
       <a href="/" class="logo">Traffic Challan Management</a>
       <nav class="right">
-        <a routerLink="/login" class="button alt">Log in</a>
+
+        <a *ngIf="this.auth.getUser() === false" routerLink="/login" class="button alt">Log in</a>
+        <a *ngIf="this.auth.getUser() != false" routerLink="/dashboard" class="button alt">Dashboard</a>
+        <a *ngIf="this.auth.getUser() != false" (click)="this.auth.logout()" class="button alt">Log Out</a>
       </nav>
     </header>
 
@@ -17,7 +20,10 @@
         <li><a href="#footer">Contact Us</a></li>
       </ul>
       <ul class="actions vertical">
-        <li><a routerLink="/login" class="button fit">Login</a></li>
+        <li><a  *ngIf="this.auth.getUser() === false" routerLink="/login" class="button fit">Login</a>
+          <a  *ngIf="this.auth.getUser() != false" routerLink="/dashboard" class="button fit">Dashboard</a>
+          <a  *ngIf="this.auth.getUser() != false" (click)="this.auth.logout()" class="button fit">Log Out</a>
+        </li>
       </ul>
     </nav>
 

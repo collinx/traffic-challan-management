@@ -4,16 +4,15 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { GlobalDataService } from './../global-data.service';
 import { FirebaseAuthService } from './../firebase-auth.service';
 import { Router } from '@angular/router';
-import * as Chart from 'chart.js'
+import * as Chart from 'chart.js';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements AfterViewInit {
-  
-  constructor(public auth: FirebaseAuthService ,public router:Router, public af: AngularFireDatabase, public global:GlobalDataService ) { 
-    if(this.auth.getUser() == false){
+  constructor(public auth: FirebaseAuthService , public router: Router, public af: AngularFireDatabase, public global: GlobalDataService ) {
+    if (this.auth.getUser() === false) {
       this.router.navigate(['/login']);
     }
   }
@@ -34,10 +33,10 @@ export class DashboardComponent implements AfterViewInit {
     let myChart = new Chart(this.ctx, {
       type: 'pie',
       data: {
-          labels: ["New", "In Progress", "On Hold"],
+          labels: ["New", "In Progress", "Closed"],
           datasets: [{
-              label: '# of Votes',
-              data: [1,2,3],
+              label: '# of Challan',
+              data: [5,1,2],
               backgroundColor: [
                   'rgba(255, 99, 132, 1)',
                   'rgba(54, 162, 235, 1)',
@@ -59,14 +58,17 @@ export class DashboardComponent implements AfterViewInit {
     let myChart = new Chart(this.ctx, {
       type: 'pie',
       data: {
-          labels: ["New", "In Progress", "On Hold"],
+          labels: ["101", "102", "103","105","106","107"],
           datasets: [{
-              label: '# of Votes',
-              data: [1,2,3],
+              label: '# of Challan',
+              data: [1,2,3,1,4,2],
               backgroundColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)'
+                'rgba(255,99,132,1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
               ],
               borderWidth: 3
           }]
@@ -84,9 +86,9 @@ export class DashboardComponent implements AfterViewInit {
     var myChart = new Chart(this.ctx, {
       type: 'bar',
       data: {
-          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          labels: ["North", "South", "East", "West", "South-West", "North-East"],
           datasets: [{
-              label: '# of Votes',
+              label: '# of Challan',
               data: [12, 19, 3, 5, 2, 3],
               backgroundColor: [
                   'rgba(255, 99, 132, 0.2)',
@@ -125,25 +127,16 @@ export class DashboardComponent implements AfterViewInit {
     var myChart = new Chart(this.ctx, {
       type: 'line',
       data: {
-          labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+          labels: ["Jan", 'Mar', 'May', 'Jul', 'Sep', 'Nov'],
           datasets: [{
-              label: '# of Votes',
+              label: '# of Challan',
               data: [12, 19, 3, 5, 2, 3],
               backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)'
+
+                  'rgba(54, 162, 235, 0.2)'
               ],
               borderColor: [
-                  'rgba(255,99,132,1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)'
+                  'rgba(255, 206, 86, 1)'
               ],
               borderWidth: 1
           }]
@@ -152,7 +145,7 @@ export class DashboardComponent implements AfterViewInit {
           scales: {
               yAxes: [{
                   ticks: {
-                      beginAtZero:true
+                      beginAtZero: true
                   }
               }]
           }

@@ -24,25 +24,5 @@
     </div>
 
     
-    <bs-modal #myModal>
-            <bs-modal-header  [showDismiss]="true">
-                <h4 class="modal-title">Add Officer</h4>
-                
-            </bs-modal-header>
-            <bs-modal-body>
-                   Name:<br>
-                    <input type="text" name="name" [(ngModel)]="officer.name"><br>
-                   Badge Number:<br>
-                    <input type="text" name="badge_number" [(ngModel)]="officer.badge_number"> <br>
-                   Precinct:<br>
-                    <input type="text" name="precinct" [(ngModel)]="officer.precinct"><br>
-                   Type:<br>
-                    <input type="text" name="type" [(ngModel)]="officer.type"> 
-
-            </bs-modal-body>
-            <bs-modal-footer >
-                <button type="submit" class="btn-primary" (click)="data.addOfficer(officer)">Submit</button>
-            </bs-modal-footer>
-            
-        </bs-modal>
+ 
           

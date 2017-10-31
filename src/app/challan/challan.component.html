@@ -32,19 +32,4 @@
         </div>
     </div>
 
-    <bs-modal #myModal>
-            <bs-modal-header  [showDismiss]="true">
-                <h4 class="modal-title">Forgot Password</h4>
-                
-            </bs-modal-header>
-            <bs-modal-body>
-                    <input type="file" accept="image/*" (change)="onChange($event)"/>
-                    <br>
-                    <p style="text-align:center">OR</p>
-                    <br>
-                    <input type="url" name="webaddress" style="text-align:center" [(ngModel)]="webaddress" placeholder="www.google.com"/>  <button type="submit" (click)="submit()" >Submit</button>
-            </bs-modal-body>
-            <bs-modal-footer [showDefaultButtons]="true"></bs-modal-footer>
-            
-        </bs-modal>
-          
+ 

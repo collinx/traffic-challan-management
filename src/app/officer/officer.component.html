@@ -1,0 +1,132 @@
+<header id="header">
+        <nav class="left">
+                <a href="#menu">
+                        <span>Menu</span>
+                </a>
+        </nav>
+        <a class="logo">Traffic Challan Management</a>
+        <nav class="right">
+                <a (click)="auth.logout()" class="button alt">Log Out</a>
+        </nav>
+</header>
+
+<!-- Menu -->
+<nav id="menu" >
+        <ul class="links" *ngIf="auth.getUserType() === 'admin'">
+                <li>
+                        <a routerLink="/dashboard">Dashboard</a>
+                </li>
+                <li>
+                        <a routerLink="/challan">View Challans</a>
+                </li>
+                <li>
+                        <a routerLink="/officer">Manage Offences</a>
+                </li>
+                <li>
+                        <a routerLink="/commuter">Manage Commuters</a>
+                </li>
+        </ul>
+        <ul class="actions vertical">
+                <li>
+                        <a (click)="auth.logout()" class="button fit">Log Out</a>
+                </li>
+        </ul>
+
+</nav>
+<!-- Main -->
+<section id="main" class="wrapper">
+        <div class="inner">
+                <header class="align-center">
+                        <h1>Officers</h1>
+
+                </header>
+
+
+
+
+                <div class="table-wrapper">
+                        <div class="align-right">
+                                <a (click)="open()" class="button special small align-center">
+                                        Create Officer</a>
+                        </div>
+
+                        <br>
+                        <table>
+                                <thead>
+
+                                        <tr>
+                                                <th>Badge Number</th>
+                                                <th>Name</th>
+                                                <th>Precinct</th>
+                                                <th>Type</th>
+                                                <th>Actions</th>
+                                        </tr>
+                                </thead>
+
+                                <tbody>
+                                        <tr *ngFor="let officer of data.officers | async">
+                                                <td>{{officer.badge_number}}</td>
+                                                <td>{{officer.name}}</td>
+                                                <td>{{officer.precinct}}</td>
+                                                <td>{{officer.type}}</td>
+                                                <td>
+
+                                                        <a (click)="edit(officer)">
+                                                                <i class="icon fa-pencil" title="Edit"></i>
+                                                        </a>
+                                                        <a (click)="delete(officer)">
+                                                                <i class="icon fa-trash" title="Delete"></i>
+                                                        </a>
+
+
+
+                                                </td>
+
+                                        </tr>
+
+                                        <tr *ngIf="data.officers == null">
+                                                <td colspan="5" style="text-align:center;">No data to display</td>
+                                        </tr>
+                                </tbody>
+
+                        </table>
+                </div>
+
+
+
+
+
+        </div>
+</section>
+
+
+
+<modal #myModal style="margin-top:5%;">
+        <form #modalForm="ngForm">
+                <modal-header>
+                        <h4 class="modal-title">Add Officer</h4>
+                </modal-header>
+                <modal-body>
+                        <div class="form-group">
+                                <label>Badge Number</label>
+                                <input type="text" class="form-control" name="Badge_Number" required [(ngModel)]="officer.badge_number">
+                        </div>
+                        <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" name="Name" required [(ngModel)]="officer.name">
+                        </div>
+                        <div class="form-group">
+                                <label>Precinct</label>
+                                <input type="text" class="form-control" name="Precinct" required [(ngModel)]="officer.precinct">
+                        </div>
+                        <div class="form-group">
+                                <label>Type</label>
+                                <input type="text" class="form-control" name="Type" required [(ngModel)]="officer.type">
+                        </div>
+                </modal-body>
+                <modal-footer>
+                        <button type="button" class="btn btn-default" (click)="close()">Cancel</button>
+                        <button type="button" class="btn btn-primary" [disabled]="!modalForm.valid" (click)="saveM()">{{button_name}}</button>
+                </modal-footer>
+        </form>
+</modal>

@@ -7,7 +7,7 @@
       <nav class="right">
 
         <a *ngIf="this.auth.getUser() === false" routerLink="/login" class="button alt">Log in</a>
-        <a *ngIf="this.auth.getUser() != false" routerLink="/dashboard" class="button alt">Dashboard</a>
+        <a *ngIf="this.auth.getUser() != false && auth.getUserType() === 'admin'" routerLink="/dashboard" class="button alt">Dashboard</a>
         <a *ngIf="this.auth.getUser() != false" (click)="this.auth.logout()" class="button alt">Log Out</a>
       </nav>
     </header>
@@ -21,7 +21,7 @@
       </ul>
       <ul class="actions vertical">
         <li><a  *ngIf="this.auth.getUser() === false" routerLink="/login" class="button fit">Login</a>
-          <a  *ngIf="this.auth.getUser() != false" routerLink="/dashboard" class="button fit">Dashboard</a>
+          <a  *ngIf="this.auth.getUser() != false && auth.getUserType() === 'admin'" routerLink="/dashboard" class="button fit">Dashboard</a>
           <a  *ngIf="this.auth.getUser() != false" (click)="this.auth.logout()" class="button fit">Log Out</a>
         </li>
       </ul>

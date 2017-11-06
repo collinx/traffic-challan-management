@@ -84,7 +84,7 @@ export class FirebaseDataService {
     this.afs.doc<CHALLAN>('Challans/' + challan.challan_number).update(challan);
   }
   updateOfficer(officer: OFFICER) {
-    this.afs.doc<OFFICER>('Officers/' + officer.uid).update(officer);
+    this.afs.doc<OFFICER>('Officers/' + officer.badge_number).update(officer);
   }
   updateCommuter(commuter: COMMUTER) {
     this.afs.doc<COMMUTER>('Commuters/' + commuter.dl_no).update(commuter);
@@ -107,7 +107,7 @@ export class FirebaseDataService {
   }
 
   deleteOfficer(officer: OFFICER) {
-    this.afs.doc('Officers/' + officer.uid).delete();
+    this.afs.doc('Officers/' + officer.badge_number).delete();
       this.valueChangeM();
   }
 }

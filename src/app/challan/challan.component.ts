@@ -1,11 +1,12 @@
+import { InlineResponse200 } from 'openalpr_api/src';
+import { ImageFetchService } from './../image-fetch.service';
 import { FirebaseDataService } from './../firebase-data.service';
-import { GlobalDataService } from './../global-data.service';
-import { AngularFireDatabase } from 'angularfire2/database';
 import { Router } from '@angular/router';
 import { FirebaseAuthService } from './../firebase-auth.service';
 import { CHALLAN } from './../modules/mymodules';
-import { BsModalComponent } from 'ng2-bs3-modal';
+import { ModalComponent } from 'ng2-bs3-modal';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import * as firebases from 'firebase';
 
 @Component({
   selector: 'app-challan',
@@ -13,26 +14,56 @@ import { Component, OnInit, ViewChild } from '@angular/core';
   styleUrls: ['./challan.component.css']
 })
 export class ChallanComponent implements OnInit {
+
   @ViewChild('myModal')
-  modal: BsModalComponent;
+  modal: ModalComponent;
   files;
-  webaddress;
-  
-   constructor(public auth: FirebaseAuthService ,public router:Router, public data:FirebaseDataService, public global:GlobalDataService   )  { 
-    
+  challan: CHALLAN;
+  workButton;
+  button_name;
+  fetchedData: InlineResponse200;
+  constructor(public auth: FirebaseAuthService , public router: Router, public data: FirebaseDataService,
+    public fetch: ImageFetchService  )  {
+        
   }
-  
 
   ngOnInit() {
+    this.workButton = this.upload ;
+    this.button_name = 'Upload';
+    this.challan = new CHALLAN();
   }
 
   onChange(event) {
     this.files = event.srcElement.files;
-    
+ }
+
+ upload(){
+
+  const storageRef = firebases.storage().ref();
+  const randomNumber = "sdfsdf";
+  const uploadTask: firebases.storage.UploadTask = storageRef.child(`assets/${randomNumber}/`)
+                                                             .put(this.files[0] );
+  uploadTask.on(firebases.storage.TaskEvent.STATE_CHANGED,
+        (snapshot) => {   }, (error) => {
   
+        }, () => {
+         
+         this.challan.url = uploadTask.snapshot.downloadURL;
+         console.log(this.challan.url);
+         this.fetch.getsearchresults(encodeURIComponent(this.challan.url)).subscribe(res => {
+          const fetchedData = res.json() as InlineResponse200;
+          console.log(fetchedData);
+        }
+        );
+        
+  
+        });
+
+
  }
  submit(){
-   
+
+  
  }
 
   close() {
@@ -42,4 +73,6 @@ export class ChallanComponent implements OnInit {
 open() {
     this.modal.open();
 }
+
+
 }

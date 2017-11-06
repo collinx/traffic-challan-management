@@ -1,3 +1,5 @@
+import { ImageFetchService } from './image-fetch.service';
+import { environment } from './../environments/environment';
 import { GlobalDataService } from './global-data.service';
 import { FirebaseDataService } from './firebase-data.service';
 import { FirebaseAuthService } from './firebase-auth.service';
@@ -21,18 +23,7 @@ import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
 import { FormsModule } from '@angular/forms';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { LandingComponent } from './landing/landing.component';
-
-export const environment = {
-  production: false,
-  firebase: {
-    apiKey: "AIzaSyDVNtYTJLlZEvVBhvRVxBs9qYV_206fe54",
-    authDomain: "t-challan.firebaseapp.com",
-    databaseURL: 'https://t-challan.firebaseio.com',
-    projectId: "t-challan",
-    storageBucket: "t-challan.appspot.com",
-    messagingSenderId: "943717171374"
-  }
-};
+import { Http, Response, RequestOptions, Headers, HttpModule  } from '@angular/http';
 
 const appRoutes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
@@ -68,9 +59,10 @@ const appRoutes: Routes = [
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     Ng2Bs3ModalModule,
+    HttpModule,
 
   ],
-  providers: [FirebaseAuthService, FirebaseDataService, GlobalDataService],
+  providers: [FirebaseAuthService, FirebaseDataService, GlobalDataService, ImageFetchService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

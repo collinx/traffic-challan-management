@@ -12,11 +12,6 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'app';
   check;
-  constructor(public auth: FirebaseAuthService ,public router:Router, public af: AngularFireDatabase, public global:GlobalDataService   ) { 
-    if(this.auth.getUser() == false){
-     this.check=false;
-   }else{
-     this.check = true;
-   }
+  constructor() {
 }
 }

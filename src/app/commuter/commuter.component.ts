@@ -1,6 +1,5 @@
+import { ImageFetchService } from './../image-fetch.service';
 import { FirebaseDataService } from './../firebase-data.service';
-import { GlobalDataService } from './../global-data.service';
-import { AngularFireDatabase } from 'angularfire2/database';
 import { Router } from '@angular/router';
 import { FirebaseAuthService } from './../firebase-auth.service';
 import { CHALLAN, COMMUTER } from './../modules/mymodules';
@@ -16,13 +15,12 @@ export class CommuterComponent implements OnInit {
 
   @ViewChild('myModal')
   modal: ModalComponent;
-
+  check = false;
   commuter: COMMUTER;
-
-
-  constructor(public auth: FirebaseAuthService , public router: Router, public data: FirebaseDataService,
-    public global: GlobalDataService   )  {
-
+  saveM;
+  button_name;
+  constructor(public auth: FirebaseAuthService , public router: Router,
+    public data: FirebaseDataService, public fetch: ImageFetchService  )  {
       this.commuter = new COMMUTER();
   }
 
@@ -30,13 +28,41 @@ export class CommuterComponent implements OnInit {
   ngOnInit() {
   }
 
+  submit() {
+    this.data.addCommuter(this.commuter);
+    this.close();
+  }
+
+  update() {
+    this.data.updateCommuter(this.commuter);
+    this.close();
+  }
 
   close() {
     this.modal.close();
-    this.commuter = new COMMUTER();
 }
 
 open() {
     this.modal.open();
+    this.commuter = new COMMUTER();
+    this.check = false;
+    this.button_name = 'Submit';
+    this.saveM = this.submit;
+}
+
+openO() {
+  this.modal.open();
+  this.check = true;
+  this.button_name = 'Update';
+  this.saveM = this.update;
+}
+
+edit(query) {
+  this.commuter = query;
+  this.openO();
+}
+
+delete(query) {
+  this.data.deleteCommuter(query);
 }
 }

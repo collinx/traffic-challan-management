@@ -12,7 +12,7 @@
 
 <!-- Menu -->
 <nav id="menu" >
-    <ul class="links">
+    <ul class="links" *ngIf="auth.getUserType() === 'admin'">
         <li>
             <a routerLink="/challan">View Challans</a>
         </li>

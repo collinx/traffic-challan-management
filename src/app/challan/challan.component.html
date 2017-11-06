@@ -1,35 +1,130 @@
-<div class="container">
-    
-        <div class="row col-md-6 col-md-offset-2 custyle">
-                <a (click)="open()" class="btn btn-primary btn-xs pull-right"><b>+</b> Upload new Challan</a>
-        <table class="table table-striped custab">
-        <thead>
-        
-            <tr>
-                <th>Challan Number</th>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Vehicle Number</th>
-                <th>License Number</th>
-                <th>Badge Number</th>
-                <th>Payment Due Date</th>
-                <th>Offence Code</th>
-                <th>Fine</th>
-            </tr>
-        </thead>
-                <tr *ngFor="let challan of data.challans | async">
-                        <td>{{ challan.challan_number}}</td>
-                        <td>{{challan.date}}</td>
-                        <td>{{challan.location}}</td>
-                        <td>{{challan.offender}}</td>
-                        <td>{{challan.offender}}</td>
-                        <td>{{challan.officer}}</td>
-                        <td>{{challan.payment_due_date}}</td>
-                        <td>{{challan.offence}}</td>
-                        <td>{{challan.location}}</td>  
-                </tr>
-        </table>
-        </div>
-    </div>
+<header id="header">
+        <nav class="left">
+                <a href="#menu">
+                        <span>Menu</span>
+                </a>
+        </nav>
+        <a class="logo">Traffic Challan Management</a>
+        <nav class="right">
+                <a (click)="auth.logout()" class="button alt">Log Out</a>
+        </nav>
+</header>
 
- 
+<!-- Menu -->
+<nav id="menu" >
+        <ul class="links" *ngIf="auth.getUserType() === 'admin'">
+                <li>
+                        <a routerLink="/dashboard">Dashboard</a>
+                </li>
+                <li>
+                        <a routerLink="/commuter">Manage Commuters</a>
+                </li>
+                <li>
+                        <a routerLink="/officer">Manage Officers</a>
+                </li>
+                <li>
+                        <a routerLink="/offence">Manage Offenses</a>
+                </li>
+        </ul>
+        <ul class="actions vertical">
+                <li>
+                        <a (click)="auth.logout()" class="button fit">Log Out</a>
+                </li>
+        </ul>
+
+</nav>
+<!-- Main -->
+<section id="main" class="wrapper">
+        <div class="inner">
+                <header class="align-center">
+                        <h1>Challans</h1>
+
+                </header>
+
+
+
+
+                <div class="table-wrapper">
+                        <div class="align-right">
+                                <a (click)="open()" class="button special small align-center">
+                                        Init New Challan</a>
+                        </div>
+
+                        <br>
+                        <table>
+                                <thead>
+
+                                        <tr>
+                                                <th>Image Url</th>
+                                                <th>Date</th>
+                                                <th>Location</th>
+                                                <th>Challan Number</th>
+                                                <th>Offence</th>
+                                                <th>Vehicle License</th>
+                                                <th>Offender License</th>
+                                                <th>Officer Code</th>
+                                                <th>Status</th>
+                                                <th>More Details</th>
+                                        </tr>
+                                </thead>
+
+                                <tbody>
+                                        <tr *ngFor="let challan of data.challans | async">
+                                                <td><a href="{{challan.url}}">Click Here</a></td>
+                                                <td>{{challan.date}}</td>
+                                                <td>{{challan.location}}</td>
+                                                <td>{{challan.challan_number}}</td>
+                                                <td>{{challan.offence.code}}</td>
+                                                <td>{{challan.vehicle.vehicle_plate}}</td>
+                                                <td>{{challan.person_details.dl_no}}</td>
+                                                <td>{{challan.offcier.badge_number}}</td>
+                                                <td>{{challan.status}}</td>
+                                                <td>
+
+                                                      <!--   <a (click)="">
+                                                                <i class="icon fa-pencil" title="Edit"></i>
+                                                        </a>
+                                                        <a (click)="">
+                                                                <i class="icon fa-trash" title="Delete"></i>
+                                                        </a>
+ -->
+
+
+                                               </td>
+
+                                        </tr>
+
+                                        <tr *ngIf="data.challans == null">
+                                                <td colspan="10" style="text-align:center;">No data to display</td>
+                                        </tr>
+                                </tbody>
+
+                        </table>
+                </div>
+
+
+
+
+
+        </div>
+</section>
+
+
+
+<modal #myModal style="margin-top:5%;">
+        <form #modalForm="ngForm">
+                <modal-header>
+                        <h4 class="modal-title">Upload Image</h4>
+                </modal-header>
+                <modal-body>
+                        <div class="form-group">
+                                <label>Image</label>
+                                <input type="file" accept="image/*" (change)="onChange($event)"/>
+                        </div>
+                </modal-body>
+                <modal-footer>
+                        <button type="button" class="btn btn-default" (click)="close()">Cancel</button>
+                        <button type="button" class="btn btn-primary" [disabled]="!modalForm.valid" (click)="workButton()">{{button_name}}</button>
+                </modal-footer>
+        </form>
+</modal>

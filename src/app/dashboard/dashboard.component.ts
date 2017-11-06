@@ -1,7 +1,5 @@
 import { ViewChild, Component, AfterViewInit , ElementRef, OnInit } from '@angular/core';
-import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { GlobalDataService } from './../global-data.service';
 import { FirebaseAuthService } from './../firebase-auth.service';
 import { Router } from '@angular/router';
 import * as Chart from 'chart.js';
@@ -11,7 +9,7 @@ import * as Chart from 'chart.js';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements AfterViewInit {
-  constructor(public auth: FirebaseAuthService , public router: Router, public af: AngularFireDatabase, public global: GlobalDataService ) {
+  constructor(public auth: FirebaseAuthService , public router: Router ) {
     if (this.auth.getUser() === false) {
       this.router.navigate(['/login']);
     }
@@ -36,7 +34,7 @@ export class DashboardComponent implements AfterViewInit {
           labels: ["New", "In Progress", "Closed"],
           datasets: [{
               label: '# of Challan',
-              data: [5,1,2],
+              data: [ Math.floor(Math.random() * 6) + 1  , Math.floor(Math.random() * 3) + 1, Math.floor(Math.random() * 8) + 1],
               backgroundColor: [
                   'rgba(255, 99, 132, 1)',
                   'rgba(54, 162, 235, 1)',
@@ -47,7 +45,7 @@ export class DashboardComponent implements AfterViewInit {
       },
       options: {
         responsive: true,
-        display:true
+        display: true
       }
     });
   }
@@ -58,10 +56,12 @@ export class DashboardComponent implements AfterViewInit {
     let myChart = new Chart(this.ctx, {
       type: 'pie',
       data: {
-          labels: ["101", "102", "103","105","106","107"],
+          labels: ["101", "102", "103", "105", "106", "107"],
           datasets: [{
               label: '# of Challan',
-              data: [1,2,3,1,4,2],
+              data: [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1,
+                Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1,
+                Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1],
               backgroundColor: [
                 'rgba(255,99,132,1)',
                 'rgba(54, 162, 235, 1)',
@@ -75,7 +75,7 @@ export class DashboardComponent implements AfterViewInit {
       },
       options: {
         responsive: true,
-        display:true
+        display: true
       }
     });
   }
@@ -86,10 +86,12 @@ export class DashboardComponent implements AfterViewInit {
     var myChart = new Chart(this.ctx, {
       type: 'bar',
       data: {
-          labels: ["North", "South", "East", "West", "South-West", "North-East"],
+          labels: ["North", 'South', 'East', "West", "South-West", "North-East"],
           datasets: [{
               label: '# of Challan',
-              data: [12, 19, 3, 5, 2, 3],
+              data: [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1,
+                Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1,
+                Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1],
               backgroundColor: [
                   'rgba(255, 99, 132, 0.2)',
                   'rgba(54, 162, 235, 0.2)',
@@ -113,7 +115,7 @@ export class DashboardComponent implements AfterViewInit {
           scales: {
               yAxes: [{
                   ticks: {
-                      beginAtZero:true
+                      beginAtZero: true
                   }
               }]
           }
@@ -124,13 +126,15 @@ export class DashboardComponent implements AfterViewInit {
   setLineCanvas(canvas){
     this.canvas = document.getElementById(canvas);
     this.ctx = this.canvas.getContext('2d');
-    var myChart = new Chart(this.ctx, {
+    const myChart = new Chart(this.ctx, {
       type: 'line',
       data: {
-          labels: ["Jan", 'Mar', 'May', 'Jul', 'Sep', 'Nov'],
+          labels: ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Nov'],
           datasets: [{
               label: '# of Challan',
-              data: [12, 19, 3, 5, 2, 3],
+              data: [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1,
+                Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1,
+                Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1],
               backgroundColor: [
 
                   'rgba(54, 162, 235, 0.2)'

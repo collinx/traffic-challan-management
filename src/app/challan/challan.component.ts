@@ -128,7 +128,7 @@ export class ChallanComponent implements OnInit {
         
           if (this.fetchedData.results.length != 0) {
             this.challan.vehicle.vehicle_plate = this.fetchedData.results[0].plate;
-            this.challan.person_details.vehicle_plate = value;
+            this.challan.person_details.vehicle_plate = this.fetchedData.results[0].plate;
           
             this.closeL();
             this.openLi();

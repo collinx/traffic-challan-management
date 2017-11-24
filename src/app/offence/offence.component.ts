@@ -21,6 +21,17 @@ export class OffenceComponent implements OnInit {
   button_name;
   constructor(public auth: FirebaseAuthService , public router: Router,
     public data: FirebaseDataService, public fetch: ImageFetchService  )  {
+      if(this.auth.getUser() != false){
+        const type = this.auth.getUserType();
+        switch(type){
+          case 'admin':
+          break;
+          default:  this.router.navigate(['/challan']);
+          break;
+        }
+      }else{
+          this.router.navigate(['/login']);
+      }
       this.offence = new OFFENCE();
   }
 

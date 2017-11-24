@@ -10,10 +10,16 @@ import * as Chart from 'chart.js';
 })
 export class DashboardComponent implements AfterViewInit {
   constructor(public auth: FirebaseAuthService , public router: Router ) {
-    if (this.auth.getUser() === false) {
-      this.router.navigate(['/login']);
+   if(this.auth.getUser() != false){
+      const type = this.auth.getUserType();
+      switch(type){
+        case 'admin':
+        break;
+        default:  this.router.navigate(['/challan']);
+        break;
+      }
     }else{
-    
+        this.router.navigate(['/login']);
     }
     
   }

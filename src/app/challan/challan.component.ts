@@ -7,6 +7,7 @@ import { ModalComponent } from 'ng2-bs3-modal';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as firebases from 'firebase';
 import { ActivatedRoute } from '@angular/router';
+import { UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-challan',
@@ -45,36 +46,58 @@ export class ChallanComponent implements OnInit {
   @ViewChild('payInfo')
   payInfo: ModalComponent;
 
+  @ViewChild('statusInfo')
+  statusInfo: ModalComponent;
 
   backdrop = "static";
   files;
   cur: CHALLAN;
   challan: CHALLAN;
   status;
+  check = true;
   fetchedData: InlineResponse200;
   constructor(public auth: FirebaseAuthService, public router: Router, public data: FirebaseDataService,
     public fetch: ImageFetchService, public route: ActivatedRoute) {
-     
+
+
   }
 
   ngOnInit() {
     this.challan = new CHALLAN();
     this.fetchedData = new InlineResponse200();
     this.getStatus();
-    if(this.status == "success"){
+    if (this.status == "success") {
       this.cur = JSON.parse(localStorage.getItem('challan'));
       alert('Payment done for challan ' + this.cur.challan_number);
       this.cur.status = 'paid';
       this.data.updateChallan(this.cur);
       localStorage.removeItem('challan');
-    }else if(this.status == "cancel"){
+    } else if (this.status == "cancel") {
       localStorage.removeItem('challan');
       alert('Payment not done due to cancellation by user');
-    }else if(this.status == 'failure'){
+    } else if (this.status == 'failure') {
       localStorage.removeItem('challan');
       alert('Payment Failed. Sorry for any inconvience.');
     }
-    
+
+    if(this.auth.getUserType() == 'commuter'){
+      const license = this.auth.getLicense();
+      const plate = this.auth.getVehicle();
+
+    this.data.challans.forEach(challan => {
+      challan.forEach(data => {
+        if (data.vehicle.vehicle_plate == plate) {
+          this.check = false;
+        }
+        if (data.person_details.dl_no == license) {
+          this.check = false;
+        }
+      });
+    });
+
+    }else{
+      this.check = false;
+    }
   }
 
   getStatus(): void {
@@ -102,19 +125,20 @@ export class ChallanComponent implements OnInit {
         this.challan.url = uploadTask.snapshot.downloadURL;
         this.fetch.getsearchresults(encodeURIComponent(this.challan.url)).subscribe(res => {
           this.fetchedData = res.json() as InlineResponse200;
-          console.log(this.fetchedData);
-          if(this.fetchedData.results.length != 0){
+        
+          if (this.fetchedData.results.length != 0) {
             this.challan.vehicle.vehicle_plate = this.fetchedData.results[0].plate;
-            console.log(this.fetchedData);
+            this.challan.person_details.vehicle_plate = value;
+          
             this.closeL();
             this.openLi();
           }
           // tslint:disable-next-line:one-line
-          else{
-             this.closeL();
-             alert('Undetectable Angle of Image');
+          else {
+            this.closeL();
+            alert('Undetectable Angle of Image');
           }
-         
+
         }
         );
 
@@ -126,6 +150,7 @@ export class ChallanComponent implements OnInit {
 
   callType(value) {
     this.challan.vehicle.vehicle_plate = value;
+    this.challan.person_details.vehicle_plate = value;
 
   }
 
@@ -160,17 +185,47 @@ export class ChallanComponent implements OnInit {
   }
 
   callTypeOff(value) {
+
+    this.data.officers.forEach(officer => {
+      officer.forEach(data => {
+        if (data.badge_number == value) {
+          this.challan.officer = data;
+        }
+      });
+    });
+
+
+  }
+
+  callTypeAss(value) {
+
+    this.data.officers.forEach(officer => {
+      officer.forEach(data => {
+        if (data.badge_number == value) {
+          this.cur.assignedto = data;
+        }
+      });
+    });
+
+
+  }
+
+  callTypeAt(value) {
     
-        this.data.officers.forEach(officer => {
-          officer.forEach(data => {
-            if (data.badge_number == value) {
-              this.challan.officer = data;
-            }
-          });
-        });
+         
+              this.cur.court.arrest_status = value;
+           
     
     
       }
+
+      callTypeSt(value) {
+        
+           
+                  this.cur.status = value;
+               
+        
+          }
 
 
   proceedLi() {
@@ -227,7 +282,7 @@ export class ChallanComponent implements OnInit {
     this.openOff();
   }
 
-  changeS(){
+  changeS() {
     this.challan.payment_due_date = new Date((new Date(this.challan.date)).getTime() + 1814400000).toISOString().substring(0, 10);
   }
   submit() {
@@ -309,9 +364,55 @@ export class ChallanComponent implements OnInit {
     this.payInfo.open();
   }
 
-  pay(){
-    localStorage.setItem('challan', JSON.stringify(this.cur));
+  closeCh() {
+    this.challanInfo.close();
+  }
+
+  openCh(value) {
+    this.cur = value;
+    this.challanInfo.open();
+  }
+
+  closeChallan() {
+    this.cur.status = 'closed';
+    this.data.updateChallan(this.cur);
+  }
+
+  assigned() {
     
+    this.closeAs();
+    this.cur.court.is_warrant_issued = true;
+    this.data.updateChallan(this.cur);
+  }
+
+  closeAs() {
+    this.assignInfo.close();
+  }
+
+  openAs() {
+    this.data.officers.forEach(officer => {
+      this.cur.assignedto = officer[0];
+
+    });
+    this.assignInfo.open();
+  }
+
+  closeSt() {
+    this.statusInfo.close();
+  }
+
+  statusC(){
+    this.closeSt();
+    
+    this.data.updateChallan(this.cur);
+  }
+  openSt() {
+    this.statusInfo.open();
+  }
+
+  pay() {
+    localStorage.setItem('challan', JSON.stringify(this.cur));
+
   }
 
   copyTextToClipboard(text) {
@@ -320,21 +421,21 @@ export class ChallanComponent implements OnInit {
     txtArea.style.position = 'fixed';
     txtArea.style.top = '0';
     txtArea.style.left = '0';
-    txtArea.style.opacity='0';
+    txtArea.style.opacity = '0';
     txtArea.value = text;
     document.body.appendChild(txtArea);
     txtArea.select();
     try {
-        let successful = document.execCommand('copy');
-        let msg = successful ? 'successful' : 'unsuccessful';
-        console.log('Copying text command was ' + msg);
-        if(successful){
-            return true;
-        }
+      let successful = document.execCommand('copy');
+      let msg = successful ? 'successful' : 'unsuccessful';
+      console.log('Copying text command was ' + msg);
+      if (successful) {
+        return true;
+      }
     } catch (err) {
-        console.log('Oops, unable to copy');
+      console.log('Oops, unable to copy');
     }
     document.body.removeChild(txtArea);
     return false;
-}
+  }
 }

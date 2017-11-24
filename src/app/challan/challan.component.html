@@ -1,8 +1,10 @@
 <header id="header">
-        <nav class="left" *ngIf="auth.getUserType() === 'admin'">
-                <a href="#menu">
+        <nav class="left" >
+                <a href="#menu"  *ngIf="auth.getUserType() === 'admin'">
                         <span>Menu</span>
                 </a>
+                <a *ngIf="auth.getUserType() != 'admin'"  class="button">{{auth.getUserType() | uppercase }}</a>
+                
         </nav>
         <a class="logo">Traffic Challan Management</a>
         <nav class="right">
@@ -69,41 +71,47 @@
                                 </thead>
 
                                 <tbody>
-                                        <tr *ngFor="let challan of data.challans | async">
-                                                <td>
-                                                        <a href="{{challan.url}}" target="_blank">URL Link</a>
-                                                </td>
-                                                <td>{{challan.date}}</td>
-                                                <td>
-                                                        <a href="https://www.google.co.in/maps/place/{{challan.location.x}},{{challan.location.y}}" target="_blank">View</a>
-                                                </td>
-                                                <td>{{challan.challan_number}}</td>
-                                                <td>{{challan.offence.code}}</td>
-                                                <td>{{challan.vehicle.vehicle_plate}}</td>
-                                                <td>{{challan.person_details.dl_no}}</td>
-                                                <td>{{challan.officer.badge_number}}</td>
-                                                <td>{{challan.status}}</td>
-                                                <td>
+                                        <ng-container *ngFor="let challan of data.challans | async">
 
-                                                        
 
-                                                        
-                                                        <a class="iconn">
-                                                                <i class="icon fa-eye fa-2x" title="View"></i>
-                                                        </a>
+                                                <tr *ngIf="auth.getUserType() != 'commuter' || (auth.getUserType() == 'commuter' && (auth.getVehicle() == challan.vehicle.vehicle_plate ||  auth.getLicense() == challan.person_details.dl_no)) ">
+                                                        <td>
+                                                                <a href="{{challan.url}}" target="_blank">URL Link</a>
+                                                        </td>
+                                                        <td>{{challan.date}}</td>
+                                                        <td>
+                                                                <a href="https://www.google.co.in/maps/place/{{challan.location.x}},{{challan.location.y}}" target="_blank">View</a>
+                                                        </td>
+                                                        <td>{{challan.challan_number}}</td>
+                                                        <td>{{challan.offence.code}}</td>
+                                                        <td>{{challan.vehicle.vehicle_plate}}</td>
+                                                        <td>{{challan.person_details.dl_no}}</td>
+                                                        <td>{{challan.officer.badge_number}}</td>
+                                                        <td>{{challan.status}}</td>
+                                                        <td>
 
-                                                        <a *ngIf="auth.getUserType() == 'commuter'"  (click)="openPay(challan)" hover class="iconn">
+
+
+
+                                                                <a (click)="openCh(challan)" class="iconn">
+                                                                        <i class="icon fa-eye fa-2x" title="View"></i>
+                                                                </a>
+
+                                                                <a *ngIf="auth.getUserType() == 'commuter' && challan.status != 'closed'" (click)="openPay(challan)" class="iconn">
                                                                         <i class="icon fa-money fa-2x" title="View"></i>
                                                                 </a>
-                                                        
-                                                        
-                                                </td>
 
-                                        </tr>
 
-                                        <tr *ngIf="data.challans == null">
-                                                <td colspan="10" style="text-align:center;">No data to display</td>
-                                        </tr>
+                                                        </td>
+
+                                                </tr>
+                                                
+                                        </ng-container>
+                                        <tr *ngIf="data.challans == null || check">
+                                                        <td colspan="10" style="text-align:center;">No data to display</td>
+                                                </tr>
+
+
                                 </tbody>
 
                         </table>
@@ -114,7 +122,7 @@
 
 
         </div>
-         
+
 </section>
 
 
@@ -134,6 +142,12 @@
                         </div>
                 </modal-body>
                 <modal-footer>
+                        <div style="text-align:left;">
+                                        <span>* For sample images, visit <a href="https://drive.google.com/drive/folders/1g6-VFhQApo65exXSPR4_KV_3EK8dMdT1?usp=sharing" target="_blank">Here</a></span>
+                                        <br>
+                                        <span>** Use only images containing 4 wheeler.</span>
+                        </div>
+                        
                         <button type="button" class="btn btn-default" (click)="closeUI()">Cancel</button>
                         <button type="button" class="btn btn-primary" [disabled]="!uploadForm.valid" (click)="Upload()">Upload</button>
                 </modal-footer>
@@ -173,6 +187,7 @@
                         </div>
                 </modal-body>
                 <modal-footer>
+                                
                         <button type="button" class="btn btn-default" (click)="closeLi(); openUI()">Back</button>
                         <button type="button" class="btn btn-primary" [disabled]="!licenseForm.valid" (click)="proceedLi()">Proceed</button>
                 </modal-footer>
@@ -218,6 +233,10 @@
                         </div>
                 </modal-body>
                 <modal-footer>
+                                <div style="text-align:left;">
+                                              
+                                                <span>* If no data is shown, do fill the details.</span>
+                                </div>
                         <button type="button" class="btn btn-default" (click)="closeCI(); openLi()">Back</button>
                         <button type="button" class="btn btn-primary" [disabled]="!commuterForm.valid" (click)="proceedCI()">Proceed</button>
                 </modal-footer>
@@ -358,17 +377,17 @@
                         <h4 class="modal-title">Payment</h4>
                 </modal-header>
                 <modal-body>
-                                <div class="form-group" *ngIf="cur != undefined">
-                                                <label>Challan Number</label>
-                                                <input type="number" class="form-control" name="cnumber" [(ngModel)]="cur.challan_number" readonly disabled>
-                
-                                        </div>
-                                        <div class="form-group" *ngIf="cur != undefined">
-                                                        <label>Fine Amount</label>
-                                                        <input type="number" class="form-control" name="fine" [(ngModel)]="cur.offence.cost" readonly disabled>
-                        
-                                                </div>
-                                                <label >Challan Number has been copied to Clipboard.</label>
+                        <div class="form-group" *ngIf="cur != undefined">
+                                <label>Challan Number</label>
+                                <input type="number" class="form-control" name="cnumber" [(ngModel)]="cur.challan_number" readonly disabled>
+
+                        </div>
+                        <div class="form-group" *ngIf="cur != undefined">
+                                <label>Fine Amount</label>
+                                <input type="number" class="form-control" name="fine" [(ngModel)]="cur.offence.cost" readonly disabled>
+
+                        </div>
+                        <label>Challan Number has been copied to Clipboard.</label>
 
                 </modal-body>
                 <modal-footer style="align-content:center">
@@ -381,3 +400,274 @@
                 </modal-footer>
         </form>
 </modal>
+
+<modal [backdrop]="backdrop" #challanInfo style="margin-top:5%;">
+        <form #challanForm="ngForm">
+                <modal-header>
+                        <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">View Challan </h4>
+                </modal-header>
+                <modal-body *ngIf="cur != undefined">
+                        <div class="row">
+                                <div class="6u 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>Challan Number:</strong> {{cur.challan_number}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Challan Status:</strong> {{cur.status}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Image:</strong>
+                                                <a href="{{cur.url}}" target="_blank">Link</a>
+                                        </span>
+                                        <br>
+
+
+                                </div>
+
+                                <div class="6u$ 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>Date:</strong> {{cur.date}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Payment Due Date:</strong> {{cur.payment_due_date}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Location:</strong>
+                                                <a href="https://www.google.co.in/maps/place/{{cur.location.x}},{{cur.location.y}}" target="_blank">View</a>
+                                        </span>
+                                        <br>
+                                </div>
+                        </div>
+                        <br>
+                        
+                        <h3 style="text-align:center;">Vehicle Details</h3>
+
+                        <div class="row">
+                                <div class="6u 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>License Plate Number:</strong> {{cur.vehicle.vehicle_plate}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Color:</strong> {{cur.vehicle.color}}</span>
+                                        <br>
+
+
+
+                                </div>
+
+                                <div class="6u$ 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>Body Type:</strong> {{cur.vehicle.body_type}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Make:</strong> {{cur.vehicle.make}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Make Model:</strong> {{cur.vehicle.make_model}}
+                                        </span>
+                                        <br>
+                                </div>
+                        </div>
+                        <br>
+                        
+                        <h3 style="text-align:center;">Offender Details</h3>
+
+                        <div class="row">
+                                <div class="6u 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>Name:</strong> {{cur.person_details.name}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>DOB:</strong> {{cur.person_details.dob}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>Address:</strong> {{cur.person_details.address}}
+                                        </span>
+                                        <br>
+
+
+                                </div>
+
+                                <div class="6u$ 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>DL Number:</strong> {{cur.person_details.dl_no}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>DL Expiry Date:</strong> {{cur.person_details.dl_expiry}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>Contact Number:</strong> {{cur.person_details.contact_number}}
+                                        </span>
+                                        <br>
+                                </div>
+                        </div>
+                        <br>
+                        
+                        <h3 style="text-align:center;">Offence Details</h3>
+
+                        <div class="row">
+                                <div class="6u 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>Code:</strong> {{cur.offence.code}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>Description:</strong> {{cur.offence.description}}
+                                        </span>
+                                        <br>
+
+
+
+                                </div>
+
+                                <div class="6u$ 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>Points:</strong> {{cur.offence.points}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>Cost:</strong> {{cur.offence.cost}}
+                                        </span>
+                                        <br>
+
+                                </div>
+                        </div>
+                        <br>
+                        
+                        <h3 style="text-align:center;">Officer Details</h3>
+
+                        <div class="row">
+                                <div class="6u 12u$(small)" style="text-align:left;">
+                                        <h5>Incharge:</h5>
+                                        <span>
+                                                <strong>Name:</strong> {{cur.officer.name}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>Badge Number:</strong> {{cur.officer.badge_number}}
+                                        </span>
+                                        <br>
+
+
+
+                                </div>
+
+                                <div class="6u$ 12u$(small)" style="text-align:left;">
+                                        <h5>Assigned To</h5>
+                                        <span>
+                                                <strong>Name:</strong> {{cur.assignedto.name}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>Badge Number:</strong> {{cur.assignedto.badge_number}}
+                                        </span>
+                                        <br>
+
+                                </div>
+                        </div>
+                        <br>
+                        
+                        
+                        <h3 style="text-align:center;"  *ngIf="cur.court.is_warrant_issued">Court Details</h3>
+                        
+                                                <div class="row" *ngIf="cur.court.is_warrant_issued">
+                                                        <div class="6u 12u$(small)" style="text-align:left;">
+                                                              
+                                                                <span>
+                                                                        <strong>Court Date:</strong> {{cur.court.court_date}}
+                                                                </span>
+                                                                <br>
+                                                                <span>
+                                                                        <strong>Warrant Issued:</strong> {{cur.court.is_warrant_issued}}
+                                                                </span>
+                                                                <br>
+                        
+                        
+                        
+                                                        </div>
+                        
+                                                        <div class="6u$ 12u$(small)" style="text-align:left;">
+                                                               
+                                                                <span>
+                                                                        <strong>Arrest Status:</strong> {{cur.court.arrest_status}}
+                                                                </span>
+                                                                <br>
+                                                               
+                        
+                                                        </div>
+                                                </div>
+                </modal-body>
+                <modal-footer  *ngIf="cur!= undefined  && (auth.getUserType() == 'wireless' || auth.getUserType() == 'police') && cur.status != 'closed'">
+                        <button type="button"  *ngIf="auth.getUserType() == 'wireless'" class="btn btn-default" (click)="closeCh();closeChallan();">Close Challan</button>
+                        <button type="button" *ngIf="auth.getUserType() == 'wireless'" class="btn btn-default" (click)="closeCh();openAs();">Assign Officer</button>
+                        <button type="button" *ngIf="auth.getUserType() == 'wireless' || auth.getUserType() == 'police'" class="btn btn-primary" (click)="closeCh(); openSt();">Change Status</button>
+                </modal-footer>
+        </form>
+</modal>
+
+<modal [backdrop]="backdrop" #assignInfo style="margin-top:5%;">
+                <form #assignForm="ngForm">
+                        <modal-header>
+                                <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                        <span aria-hidden="true">×</span>
+                                </button>
+                                <h4 class="modal-title">Assign Officer </h4>
+                        </modal-header>
+                        <modal-body>
+                                <div class="form-group">
+                                        <label>Officer Code</label>
+                                        <select name="officerA" id="officerA" #t7 (change)="callTypeAss(t7.value)" *ngIf="data.officers != undefined">
+                                                <option *ngFor="let officer of this.data.officers | async" value="{{officer.badge_number}}">{{officer.badge_number}}</option>
+                                        </select>
+                                </div>
+                                       
+                        </modal-body>
+                        <modal-footer>
+                                <button type="button" class="btn btn-default" (click)="closeAs();">Back</button>
+                                <button type="button" class="btn btn-primary" (click)="assigned(); ">Assign</button>
+                        </modal-footer>
+                </form>
+        </modal>
+
+        <modal [backdrop]="backdrop" #statusInfo style="margin-top:5%;">
+                        <form #statusForm="ngForm">
+                                <modal-header>
+                                        <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                                <span aria-hidden="true">×</span>
+                                        </button>
+                                        <h4 class="modal-title">Change Status </h4>
+                                </modal-header>
+                                <modal-body>
+                                        <div class="form-group">
+                                                <label>Challan Status</label>
+                                                <select name="challanA" id="challanA" #t8 (change)="callTypeSt(t8.value)">
+                                                        <option value="open">Open</option>        
+                                                        <option value="pending">Pending</option>        
+                                                        <option value="paid">Paid</option>        
+                                                                
+                                                </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                                        <label>Arrest Status</label>
+                                                        <select name="courtA" id="courtA" #t9 (change)="callTypeAt(t9.value)">
+                                                                        <option value="none">None</option>        
+                                                                        <option value="arrested">Arrested</option>        
+                                                                        <option value="appeared">Appeared</option>  
+                                                                  </select>
+                                                </div>
+                                               
+                                </modal-body>
+                                <modal-footer>
+                                        <button type="button" class="btn btn-default" (click)="closeSt();">Back</button>
+                                        <button type="button" class="btn btn-primary" (click)="statusC(); ">Change</button>
+                                </modal-footer>
+                        </form>
+                </modal>

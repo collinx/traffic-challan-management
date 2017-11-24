@@ -25,6 +25,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { LandingComponent } from './landing/landing.component';
 import { Http, Response, RequestOptions, Headers, HttpModule  } from '@angular/http';
 import { ClipboardModule } from 'ngx-clipboard';
+import { DummyComponent } from './dummy/dummy.component';
 
 const appRoutes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
@@ -33,6 +34,7 @@ const appRoutes: Routes = [
   {path: 'challan', component: ChallanComponent},
   {path: 'commuter', component: CommuterComponent},
   {path: 'officer', component: OfficerComponent},
+  {path: 'dummy', component: DummyComponent},
   {path: 'offence', component: OffenceComponent},
   {path: '', component: LandingComponent}
 ];
@@ -49,6 +51,7 @@ const appRoutes: Routes = [
     OffenceComponent,
     LoginComponent,
     LandingComponent,
+    DummyComponent,
 
   ],
   imports: [

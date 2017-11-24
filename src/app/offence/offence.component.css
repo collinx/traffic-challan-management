@@ -9,3 +9,7 @@
     box-shadow: 3px 3px 0px transparent;
     transition: 0.5s;
     }
+    span, table{
+        color: black;
+        font-weight: bold;
+    }

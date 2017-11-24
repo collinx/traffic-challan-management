@@ -5,31 +5,23 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class FirebaseDataService {
-  challanCollection: AngularFirestoreCollection<any>;
-  offenceCollection: AngularFirestoreCollection<any>;
-  commuterCollection: AngularFirestoreCollection<COMMUTER>;
-  officerCollection: AngularFirestoreCollection<any>;
-  challans: Observable<any>;
-  offences: Observable<any>;
-  commuters: Observable<COMMUTER[]>;
-  officers: Observable<any>;
+  challanCollection = this.afs.collection<CHALLAN>('Challans');
+  offenceCollection = this.afs.collection<OFFENCE>('Offences');
+  commuterCollection = this.afs.collection<COMMUTER>('Commuters');
+  officerCollection = this.afs.collection<OFFICER>('Officers');
+  challans = this.challanCollection.valueChanges();
+  offences = this.offenceCollection.valueChanges();
+  commuters = this.commuterCollection.valueChanges();
+  officers = this.officerCollection.valueChanges();
 
 
 
   constructor(private afs: AngularFirestore) {
-    this.challanCollection = afs.collection<CHALLAN>('Challans');
-    this.offenceCollection = afs.collection<OFFENCE>('Offences');
-    this.commuterCollection = afs.collection<COMMUTER>('Commuters');
-    this.officerCollection = afs.collection<OFFICER>('Officers');
-    this.valueChangeM();
+ 
+   
   }
 
-  valueChangeM() {
-    this.challans = this.challanCollection.valueChanges();
-    this.offences = this.offenceCollection.valueChanges();
-    this.commuters = this.commuterCollection.valueChanges();
-    this.officers = this.officerCollection.valueChanges();
-  }
+ 
 
   addChallan(challan: CHALLAN) {
     this.challanCollection.doc('' + challan.challan_number).set({
@@ -134,19 +126,19 @@ export class FirebaseDataService {
 
   deleteChallan(challan: CHALLAN) {
     this.afs.doc('Challans/' + challan.challan_number).delete();
-    this.valueChangeM();
+     
   }
   deleteOffence(offence: OFFENCE) {
     this.afs.doc('Offences/' + offence.code).delete();
-    this.valueChangeM();
+     
   }
   deleteCommuter(commuter: COMMUTER) {
     this.afs.doc('Commuters/' + commuter.dl_no).delete();
-    this.valueChangeM();
+     
   }
 
   deleteOfficer(officer: OFFICER) {
     this.afs.doc('Officers/' + officer.badge_number).delete();
-      this.valueChangeM();
+       
   }
 }

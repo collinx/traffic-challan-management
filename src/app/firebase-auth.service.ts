@@ -65,11 +65,39 @@ export class FirebaseAuthService {
     }
   }
 
+  getVehicle() {
+    
+        if (localStorage.getItem('plate')) {
+    
+    
+          return JSON.parse(localStorage.getItem('plate'));
+        } else {
+    
+    
+    
+          return false;
+        }
+      }
+
+      getLicense() {
+        
+            if (localStorage.getItem('license')) {
+        
+        
+              return JSON.parse(localStorage.getItem('license'));
+            } else {
+        
+        
+        
+              return false;
+            }
+          }
+
   logout() {
     this.af.auth.signOut();
     localStorage.removeItem('user');
     localStorage.removeItem('type')
-    localStorage.clear();
+    localStorage.clear(); 
     this.router.navigate(['/login']);
   }
 

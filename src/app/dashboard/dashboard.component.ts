@@ -12,7 +12,10 @@ export class DashboardComponent implements AfterViewInit {
   constructor(public auth: FirebaseAuthService , public router: Router ) {
     if (this.auth.getUser() === false) {
       this.router.navigate(['/login']);
+    }else{
+    
     }
+    
   }
 
   canvas: any;

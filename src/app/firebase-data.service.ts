@@ -36,15 +36,54 @@ export class FirebaseDataService {
       'url': challan.url,
       'challan_number': challan.challan_number,
       'date': challan.date,
-      'location': challan.location,
-      'offence': challan.offence,
-      'person_details': challan.person_details,
-      'vehicle': challan.vehicle,
-      'officer': challan.officer,
+      'location': {
+        'x': challan.location.x,
+        'y': challan.location.y
+      },
+      'offence': {
+        'code': challan.offence.code,
+        'description': challan.offence.description,
+        'cost': challan.offence.cost,
+        'points': challan.offence.points
+      },
+      'person_details': {
+        'name': challan.person_details.name,
+        'dob': challan.person_details.dob,
+        'address': challan.person_details.address,
+        'contact_number': challan.person_details.contact_number,
+        'dl_no': challan.person_details.dl_no,
+        'dl_expiry': challan.person_details.dl_expiry,
+        'vehicle_plate': challan.person_details.vehicle_plate
+      },
+      'vehicle': {
+        'color': challan.vehicle.color,
+        'make': challan.vehicle.make,
+        'make_model': challan.vehicle.make_model,
+        'body_type': challan.vehicle.body_type,
+        'vehicle_plate': challan.vehicle.vehicle_plate,
+
+      },
+      'officer': {
+        'badge_number': challan.officer.badge_number,
+        'name': challan.officer.name,
+        'precinct': challan.officer.precinct,
+        'type': challan.officer.type,
+        'uid': challan.officer.uid
+      },
       'payment_due_date': challan.payment_due_date,
       'status': challan.status,
-      'court': challan.court,
-      'assignedto': challan.assignedto
+      'court': {
+        'court_date': challan.court.court_date,
+        'is_warrant_issued': challan.court.is_warrant_issued,
+        'arrest_status': challan.court.arrest_status
+      },
+      'assignedto': {
+        'badge_number': challan.assignedto.badge_number,
+        'name': challan.assignedto.name,
+        'precinct': challan.assignedto.precinct,
+        'type': challan.assignedto.type,
+        'uid': challan.assignedto.uid
+      }
     });
 
   }

@@ -18,6 +18,7 @@
 
 		var	$window = $(window),
 			$body = $('body'),
+			$something= $('router-outlet'),
 			$header = $('#header');
 
 		// Disable animations/transitions until the page has loaded.
@@ -50,7 +51,7 @@
 		// Menu.
 			$('#menu')
 				.append('<a href="#menu" class="close"></a>')
-				.appendTo($body)
+				.appendTo($something)
 				.panel({
 					delay: 500,
 					hideOnClick: true,

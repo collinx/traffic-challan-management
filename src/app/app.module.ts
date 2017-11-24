@@ -28,6 +28,7 @@ import { Http, Response, RequestOptions, Headers, HttpModule  } from '@angular/h
 const appRoutes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'challan/:status', component: ChallanComponent},
   {path: 'challan', component: ChallanComponent},
   {path: 'commuter', component: CommuterComponent},
   {path: 'officer', component: OfficerComponent},
@@ -62,6 +63,7 @@ const appRoutes: Routes = [
     HttpModule,
 
   ],
+  exports: [ RouterModule ],
   providers: [FirebaseAuthService, FirebaseDataService, GlobalDataService, ImageFetchService],
   bootstrap: [AppComponent]
 })

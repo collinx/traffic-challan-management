@@ -1,31 +1,4 @@
-<!--  
-  <div class="modal-dialog">
-  <div class="loginmodal-container">
-    <h1>Login to Your Account</h1><br>
-    <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate> 
-    <input type="text" name="email" [(ngModel)]="email" placeholder="Email" required>
-    <input type="password" name="password" [(ngModel)]="password" placeholder="Password" required>
-    <button [disabled]="email == '' || password == ''" class="btn btn-primary">Login</button>
-    </form>
-    
-    <div class="login-help">
-    <a >Forgot Password</a>
-     <a (click)="open()">Forgot Password</a>  
-    </div>
-  </div>
-  </div>
-<footer>Use admin@gov.in as email and admin96 as password</footer>
-   <bs-modal #myModal>
-      <bs-modal-header>
-          <h4 class="modal-title">Forgot Password</h4>
-      </bs-modal-header>
-      <bs-modal-body>
-          <input type="text" name="emailforgot" placeholder="Email" [(ngModel)]="emailforgot"> 
-          <input type="submit" name="submit"  value="Submit">
-      </bs-modal-body>
-      
-  </bs-modal>  
-     -->
+
      		<!-- Header -->
     <header id="header">
       <nav class="left">
@@ -33,7 +6,7 @@
       </nav>
       <a href="/" class="logo">Traffic Challan Management</a>
       <nav class="right">
-        <a routerLink="/" class="button alt">Home</a>
+        <a routerLink="/" class="button">Home</a>
       </nav>
     </header>
 
@@ -94,10 +67,10 @@
          <div class="cont_form_sign_up">
       <a  onclick="ocultar_login_sign_up()"><i class="material-icons">&#xE5C4;</i></a>
            <h2>Commuter</h2>
-           <input type="text" value="" placeholder="License Number" />
+           <input type="text" value="" [(ngModel)]="license" placeholder="License Number" />
            <h4>OR</h4>
-           <input type="text" value="" placeholder="Vehicle Number" />
-      <button class="btn_sign_up" onclick="cambiar_sign_up()">View</button>
+           <input type="text" value="" [(ngModel)]="plate" placeholder="Vehicle Number" />
+      <button class="btn_sign_up" onclick="cambiar_sign_up()" (click)="loginA()">View</button>
       
         </div>
       

@@ -1,5 +1,5 @@
 <header id="header">
-        <nav class="left">
+        <nav class="left" *ngIf="auth.getUserType() === 'admin'">
                 <a href="#menu">
                         <span>Menu</span>
                 </a>
@@ -85,22 +85,18 @@
                                                 <td>{{challan.status}}</td>
                                                 <td>
 
-                                                        <a *ngIf="auth.getUserType() == 'commuter'" (click)="openPay(challan)" class="button special small align-center">
-                                                                Pay</a>
+                                                        
 
-
+                                                        
                                                         <a class="iconn">
-                                                                <i class="icon fa-eye" title="View"></i>
-                                                        </a>
-                                                        <a class="iconn">
-                                                                <i class="icon fa-id-card" title="Court"></i>
-                                                        </a>
-                                                        <a class="iconn">
-                                                                <i class="icon fa-gavel" title="Court"></i>
+                                                                <i class="icon fa-eye fa-2x" title="View"></i>
                                                         </a>
 
-
-
+                                                        <a *ngIf="auth.getUserType() == 'commuter'"  (click)="openPay(challan)" hover class="iconn">
+                                                                        <i class="icon fa-money fa-2x" title="View"></i>
+                                                                </a>
+                                                        
+                                                        
                                                 </td>
 
                                         </tr>
@@ -118,32 +114,7 @@
 
 
         </div>
-        <form action="https://www.sandbox.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                <input type="hidden" name="cmd" value="_s-xclick">
-                <input type="hidden" name="hosted_button_id" value="GH8GWYUB4SS9E">
-                <table>
-                        <tr>
-                                <td>
-                                        <input type="hidden" name="on0" value="Offence Code">Offence Code</td>
-                        </tr>
-                        <tr>
-                                <td>
-                                        <select name="os0">
-                                                <option value="101">101 </option>
-                                                <option value="102">102 </option>
-                                                <option value="103">103 </option>
-                                                <option value="104">104 </option>
-                                                <option value="105">105 </option>
-                                                <option value="106">106 </option>
-                                                <option value="107">107 </option>
-                                        </select>
-                                </td>
-                        </tr>
-                </table>
-                <input type="image" src="https://www.sandbox.paypal.com/en_GB/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal – The safer, easier way to pay online!">
-                <img alt="" border="0" src="https://www.sandbox.paypal.com/en_GB/i/scr/pixel.gif" width="1" height="1">
-        </form>
-
+         
 </section>
 
 
@@ -387,21 +358,22 @@
                         <h4 class="modal-title">Payment</h4>
                 </modal-header>
                 <modal-body>
-                                <div class="form-group">
+                                <div class="form-group" *ngIf="cur != undefined">
                                                 <label>Challan Number</label>
                                                 <input type="number" class="form-control" name="cnumber" [(ngModel)]="cur.challan_number" readonly disabled>
                 
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group" *ngIf="cur != undefined">
                                                         <label>Fine Amount</label>
                                                         <input type="number" class="form-control" name="fine" [(ngModel)]="cur.offence.cost" readonly disabled>
                         
                                                 </div>
+                                                <label >Challan Number has been copied to Clipboard.</label>
 
                 </modal-body>
                 <modal-footer style="align-content:center">
                         <div class="pm-button">
-                                <a href="https://www.payumoney.com/paybypayumoney/#/9794700C987B0684EB25492E16EDC0F5" target="_blank" (click)="pay()">
+                                <a href="https://www.payumoney.com/paybypayumoney/#/9794700C987B0684EB25492E16EDC0F5" (click)="pay()">
                                         <img src="https://www.payumoney.com//media/images/payby_payumoney/buttons/212.png" />
                                 </a>
                         </div>

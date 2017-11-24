@@ -13,12 +13,20 @@ export class LoginComponent implements OnInit {
   password= '';
   emailforgot='';
   current='false';
-
+  license = '';
+  plate = '';
 
   constructor(public auth: FirebaseAuthService , public router:Router  ) {
+  
     if(this.auth.getUser() != false){
-     this.router.navigate(['/dashboard']);
-   }
+      const type = this.auth.getUserType();
+      switch(type){
+        case 'admin':  this.router.navigate(['/dashboard']);
+        break;
+        default:  this.router.navigate(['/challan']);
+        break;
+      }
+    }
 
 }
 
@@ -29,14 +37,18 @@ login() {
 
  if(this.email.includes('admin')){
    localStorage.setItem('type',JSON.stringify('admin'));
+   this.router.navigate(['/dashboard']);
  } else if(this.email.includes('wco')){
    localStorage.setItem('type',JSON.stringify('wireless'));
+   this.router.navigate(['/challan']);
  } else if(this.email.includes('to')){
   localStorage.setItem('type',JSON.stringify('traffic'));
+  this.router.navigate(['/challan']);
 }else if(this.email.includes('po')){
   localStorage.setItem('type',JSON.stringify('police'));
+  this.router.navigate(['/challan']);
 }
- this.router.navigate(['/dashboard']);
+ 
  }else{
    alert('Wrong Credentials.');
  }
@@ -47,6 +59,8 @@ loginA(){
   this.auth.loginAnonymous().then(data => {
     if (data === true){
       localStorage.setItem('type',JSON.stringify('commuter') );
+      localStorage.setItem('license',JSON.stringify(this.license));
+      localStorage.setItem('plate',JSON.stringify(this.plate));
       this.router.navigate(['/challan']);
     }
   });

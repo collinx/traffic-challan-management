@@ -6,7 +6,7 @@ import { CHALLAN, InlineResponse200, COMMUTER } from './../modules/mymodules';
 import { ModalComponent } from 'ng2-bs3-modal';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as firebases from 'firebase';
-import { ActivatedRoute } from '@angular/router/src/router_state';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-challan',
@@ -50,6 +50,7 @@ export class ChallanComponent implements OnInit {
   files;
   cur: CHALLAN;
   challan: CHALLAN;
+  status;
   fetchedData: InlineResponse200;
   constructor(public auth: FirebaseAuthService, public router: Router, public data: FirebaseDataService,
     public fetch: ImageFetchService, public route: ActivatedRoute) {
@@ -60,21 +61,24 @@ export class ChallanComponent implements OnInit {
     this.challan = new CHALLAN();
     this.fetchedData = new InlineResponse200();
     this.getStatus();
-    if(status == "success"){
+    if(this.status == "success"){
       this.cur = JSON.parse(localStorage.getItem('challan'));
       alert('Payment done for challan ' + this.cur.challan_number);
       this.cur.status = 'paid';
       this.data.updateChallan(this.cur);
-    }else if(status == "cancel"){
+      localStorage.removeItem('challan');
+    }else if(this.status == "cancel"){
+      localStorage.removeItem('challan');
       alert('Payment not done due to cancellation by user');
-    }else if(status == 'failure'){
+    }else if(this.status == 'failure'){
+      localStorage.removeItem('challan');
       alert('Payment Failed. Sorry for any inconvience.');
     }
-    this.openPay(this.challan);
+    
   }
 
   getStatus(): void {
-    const status = this.route.snapshot.paramMap.get('status');
+    this.status = this.route.snapshot.paramMap.get('status');
   }
 
   onChange(event) {
@@ -301,10 +305,36 @@ export class ChallanComponent implements OnInit {
 
   openPay(value) {
     this.cur = value;
+    let result = this.copyTextToClipboard('' + this.cur.challan_number);
     this.payInfo.open();
   }
 
   pay(){
     localStorage.setItem('challan', JSON.stringify(this.cur));
+    
   }
+
+  copyTextToClipboard(text) {
+    let txtArea = document.createElement("textarea");
+
+    txtArea.style.position = 'fixed';
+    txtArea.style.top = '0';
+    txtArea.style.left = '0';
+    txtArea.style.opacity='0';
+    txtArea.value = text;
+    document.body.appendChild(txtArea);
+    txtArea.select();
+    try {
+        let successful = document.execCommand('copy');
+        let msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Copying text command was ' + msg);
+        if(successful){
+            return true;
+        }
+    } catch (err) {
+        console.log('Oops, unable to copy');
+    }
+    document.body.removeChild(txtArea);
+    return false;
+}
 }

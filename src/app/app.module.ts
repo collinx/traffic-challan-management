@@ -24,6 +24,7 @@ import { FormsModule } from '@angular/forms';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { LandingComponent } from './landing/landing.component';
 import { Http, Response, RequestOptions, Headers, HttpModule  } from '@angular/http';
+import { ClipboardModule } from 'ngx-clipboard';
 
 const appRoutes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
@@ -61,7 +62,6 @@ const appRoutes: Routes = [
     AngularFireAuthModule,
     Ng2Bs3ModalModule,
     HttpModule,
-
   ],
   exports: [ RouterModule ],
   providers: [FirebaseAuthService, FirebaseDataService, GlobalDataService, ImageFetchService],

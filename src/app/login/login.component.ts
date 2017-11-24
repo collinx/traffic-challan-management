@@ -21,9 +21,9 @@ export class LoginComponent implements OnInit {
     if(this.auth.getUser() != false){
       const type = this.auth.getUserType();
       switch(type){
-        case 'admin':  this.router.navigate(['/dashboard']);
+        case 'admin':  this.router.navigate(['/dashboard/1']);
         break;
-        default:  this.router.navigate(['/challan']);
+        default:  this.router.navigate(['/challan/1']);
         break;
       }
     }
@@ -37,16 +37,16 @@ login() {
 
  if(this.email.includes('admin')){
    localStorage.setItem('type',JSON.stringify('admin'));
-   this.router.navigate(['/dashboard']);
+   this.router.navigate(['/dashboard/1']);
  } else if(this.email.includes('wco')){
    localStorage.setItem('type',JSON.stringify('wireless'));
-   this.router.navigate(['/challan']);
+   this.router.navigate(['/challan/1']);
  } else if(this.email.includes('to')){
   localStorage.setItem('type',JSON.stringify('traffic'));
-  this.router.navigate(['/challan']);
+  this.router.navigate(['/challan/1']);
 }else if(this.email.includes('po')){
   localStorage.setItem('type',JSON.stringify('police'));
-  this.router.navigate(['/challan']);
+  this.router.navigate(['/challan/1']);
 }
  
  }else{
@@ -61,7 +61,7 @@ loginA(){
       localStorage.setItem('type',JSON.stringify('commuter') );
       localStorage.setItem('license',JSON.stringify(this.license));
       localStorage.setItem('plate',JSON.stringify(this.plate));
-      this.router.navigate(['/challan']);
+      this.router.navigate(['/challan/1']);
     }
   });
 }

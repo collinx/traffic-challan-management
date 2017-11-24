@@ -1,6 +1,7 @@
+ 
 import { GlobalDataService } from './global-data.service';
 import { AngularFireDatabase } from 'angularfire2/database';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { FirebaseAuthService } from './firebase-auth.service';
 import { Component } from '@angular/core';
 
@@ -12,6 +13,7 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'app';
   check;
-  constructor() {
+  constructor(public router: Router) {
+  
 }
 }

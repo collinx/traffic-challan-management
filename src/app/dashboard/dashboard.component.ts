@@ -1,7 +1,8 @@
+
 import { ViewChild, Component, AfterViewInit , ElementRef, OnInit } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { FirebaseAuthService } from './../firebase-auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as Chart from 'chart.js';
 @Component({
   selector: 'app-dashboard',
@@ -9,11 +10,19 @@ import * as Chart from 'chart.js';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements AfterViewInit {
-  constructor(public auth: FirebaseAuthService , public router: Router ) {
+
+    status;
+  constructor(public auth: FirebaseAuthService , public router: Router, public route: ActivatedRoute ) {
+    this.getStatus();
    if(this.auth.getUser() != false){
       const type = this.auth.getUserType();
       switch(type){
         case 'admin':
+        
+        if (this.status == 1) {
+            this.router.navigate(['/dashboard']);
+         location.reload();
+        }
         break;
         default:  this.router.navigate(['/challan']);
         break;
@@ -22,6 +31,10 @@ export class DashboardComponent implements AfterViewInit {
         this.router.navigate(['/login']);
     }
     
+    
+  }
+   getStatus(): void {
+    this.status = this.route.snapshot.paramMap.get('p');
   }
 
   canvas: any;

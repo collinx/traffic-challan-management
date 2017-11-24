@@ -58,7 +58,7 @@ export class ChallanComponent implements OnInit {
   fetchedData: InlineResponse200;
   constructor(public auth: FirebaseAuthService, public router: Router, public data: FirebaseDataService,
     public fetch: ImageFetchService, public route: ActivatedRoute) {
-
+     
 
   }
 
@@ -72,28 +72,26 @@ export class ChallanComponent implements OnInit {
       this.cur.status = 'paid';
       this.data.updateChallan(this.cur);
       localStorage.removeItem('challan');
+      this.router.navigate(['/challan/1']);
     } else if (this.status == "cancel") {
       localStorage.removeItem('challan');
       alert('Payment not done due to cancellation by user');
+      this.router.navigate(['/challan/1']);
     } else if (this.status == 'failure') {
       localStorage.removeItem('challan');
       alert('Payment Failed. Sorry for any inconvience.');
+      this.router.navigate(['/challan/1']);
+    }else if (this. status == 1){
+     
+     
+      this.router.navigate(['/challan']);
+      location.reload();
     }
 
     if(this.auth.getUserType() == 'commuter'){
       const license = this.auth.getLicense();
       const plate = this.auth.getVehicle();
-
-    this.data.challans.forEach(challan => {
-      challan.forEach(data => {
-        if (data.vehicle.vehicle_plate == plate) {
-          this.check = false;
-        }
-        if (data.person_details.dl_no == license) {
-          this.check = false;
-        }
-      });
-    });
+    
 
     }else{
       this.check = false;

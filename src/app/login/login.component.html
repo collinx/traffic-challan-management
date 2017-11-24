@@ -70,7 +70,7 @@
            <input type="text" value="" [(ngModel)]="license" placeholder="License Number" />
            <h4>OR</h4>
            <input type="text" value="" [(ngModel)]="plate" placeholder="Vehicle Number" />
-      <button class="btn_sign_up" onclick="cambiar_sign_up()" (click)="loginA()">View</button>
+      <button class="btn_sign_up"  [disabled]="license == '' && plate == ''" (click)="loginA()">View</button>
       
         </div>
       

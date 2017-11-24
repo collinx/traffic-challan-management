@@ -29,6 +29,7 @@ import { DummyComponent } from './dummy/dummy.component';
 
 const appRoutes: Routes = [
   {path: 'dashboard', component: DashboardComponent},
+  {path: 'dashboard/:p', component: DashboardComponent},
   {path: 'login', component: LoginComponent},
   {path: 'challan/:status', component: ChallanComponent},
   {path: 'challan', component: ChallanComponent},

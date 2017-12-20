@@ -1,0 +1,150 @@
+<header id="header">
+        <nav class="left">
+                <a href="#menu">
+                        <span>Menu</span>
+                </a>
+        </nav>
+        <a class="logo">Traffic Challan Management</a>
+        <nav class="right">
+                <a (click)="auth.logout()" class="button alt">Log Out</a>
+        </nav>
+</header>
+
+<!-- Menu -->
+<nav id="menu" >
+        <ul class="links" *ngIf="auth.getUserType() === 'admin'">
+                <li>
+                        <a routerLink="/dashboard">Dashboard</a>
+                </li>
+                <li>
+                        <a routerLink="/challan">View Challans</a>
+                </li>
+                <li>
+                        <a routerLink="/officer">Manage Officers</a>
+                </li>
+                <li>
+                        <a routerLink="/offence">Manage Offenses</a>
+                </li>
+        </ul>
+        <ul class="actions vertical">
+                <li>
+                        <a (click)="auth.logout()" class="button fit">Log Out</a>
+                </li>
+        </ul>
+
+</nav>
+<!-- Main -->
+<section id="main" class="wrapper">
+        <div class="inner">
+                <header class="align-center">
+                        <h1>Commuters</h1>
+
+                </header>
+
+
+
+
+                <div class="table-wrapper">
+                        <div class="align-right">
+                                <a (click)="open()" class="button special small align-center">
+                                        Create new Commuter</a>
+                        </div>
+
+                        <br>
+                        <table>
+                                <thead>
+
+                                        <tr>
+                                                <th>Name</th>
+                                                <th>DOB</th>
+                                                <th>Address</th>
+                                                <th>Contact Number</th>
+                                                <th>Driving License</th>
+                                                <th>Vehicle License</th>
+                                                <th>Driving License Expiry</th>
+                                                <th>Actions</th>
+                                        </tr>
+                                </thead>
+
+                                <tbody>
+                                        <tr *ngFor="let commuter of data.commuters | async">
+                                                <td>{{commuter.name}}</td>
+                                                <td>{{commuter.dob}}</td>
+                                                <td>{{commuter.address}}</td>
+                                                <td>{{commuter.contact_number}}</td>
+                                                <td>{{commuter.dl_no}}</td>
+                                                <td>{{commuter.vehicle_plate}}</td>
+                                                <td>{{commuter.dl_expiry}}</td>
+                                                <td>
+
+                                                        <a (click)="edit(commuter)">
+                                                                <i class="icon fa-pencil" title="Edit"></i>
+                                                        </a>
+                                                        <a (click)="delete(commuter)">
+                                                                <i class="icon fa-trash" title="Delete"></i>
+                                                        </a>
+
+
+
+                                                </td>
+
+                                        </tr>
+
+                                        <tr *ngIf="data.commuters == null">
+                                                <td colspan="8" style="text-align:center;">No data to display</td>
+                                        </tr>
+                                </tbody>
+
+                        </table>
+                </div>
+
+
+
+
+
+        </div>
+</section>
+
+
+
+<modal #myModal style="margin-top:5%;">
+        <form #modalForm="ngForm">
+                <modal-header>
+                        <h4 class="modal-title">Add Commuter</h4>
+                </modal-header>
+                <modal-body>
+                        <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" name="Name" required [(ngModel)]="commuter.name">
+                        </div>
+                        <div class="form-group">
+                                <label>DOB</label>
+                                <input type="date" class="form-control" name="DOB" required [(ngModel)]="commuter.dob">
+                        </div>
+                        <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" class="form-control" name="Address" required [(ngModel)]="commuter.address">
+                        </div>
+                        <div class="form-group">
+                                <label>Contact Number</label>
+                                <input type="number" class="form-control" name="Telephone" required [(ngModel)]="commuter.contact_number">
+                        </div>
+                        <div class="form-group">
+                                <label>Driving License</label>
+                                <input type="text" class="form-control" name="Dl_no" required [(ngModel)]="commuter.dl_no" [disabled]="check">
+                        </div>
+                        <div class="form-group">
+                                <label>Driver License Expiry</label>
+                                <input type="date" class="form-control" name="Dl_expiry" required [(ngModel)]="commuter.dl_expiry">
+                        </div>
+                        <div class="form-group">
+                                <label>Vehicle License</label>
+                                <input type="text" class="form-control" name="Vehicle_no" [(ngModel)]="commuter.vehicle_plate">
+                        </div>
+                </modal-body>
+                <modal-footer>
+                        <button type="button" class="btn btn-default" (click)="close()">Cancel</button>
+                        <button type="button" class="btn btn-primary" [disabled]="!modalForm.valid" (click)="saveM()">{{button_name}}</button>
+                </modal-footer>
+        </form>
+</modal>

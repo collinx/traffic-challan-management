@@ -1,0 +1,673 @@
+<header id="header">
+        <nav class="left" >
+                <a href="#menu"  *ngIf="auth.getUserType() === 'admin'">
+                        <span>Menu</span>
+                </a>
+                <a *ngIf="auth.getUserType() != 'admin'"  class="button">{{auth.getUserType() | uppercase }}</a>
+                
+        </nav>
+        <a class="logo">Traffic Challan Management</a>
+        <nav class="right">
+                <a (click)="auth.logout()" class="button alt">Log Out</a>
+        </nav>
+</header>
+
+<!-- Menu -->
+<nav id="menu">
+        <ul class="links" *ngIf="auth.getUserType() === 'admin'">
+                <li>
+                        <a routerLink="/dashboard">Dashboard</a>
+                </li>
+                <li>
+                        <a routerLink="/commuter">Manage Commuters</a>
+                </li>
+                <li>
+                        <a routerLink="/officer">Manage Officers</a>
+                </li>
+                <li>
+                        <a routerLink="/offence">Manage Offenses</a>
+                </li>
+        </ul>
+        <ul class="actions vertical">
+                <li>
+                        <a (click)="auth.logout()" class="button fit">Log Out</a>
+                </li>
+        </ul>
+
+</nav>
+<!-- Main -->
+<section id="main" class="wrapper">
+        <div class="inner">
+                <header class="align-center">
+                        <h1>Challans</h1>
+
+                </header>
+
+
+
+
+                <div class="table-wrapper">
+                        <div class="align-right" *ngIf="auth.getUserType() != 'admin' && auth.getUserType() != 'commuter'">
+                                <a (click)="openUI()" class="button special small align-center">
+                                        Init New Challan</a>
+                        </div>
+
+                        <br>
+                        <table>
+                                <thead>
+
+                                        <tr>
+                                                <th>Image Url</th>
+                                                <th>Date</th>
+                                                <th>Location</th>
+                                                <th>Challan Number</th>
+                                                <th>Offence</th>
+                                                <th>Vehicle License</th>
+                                                <th>Offender License</th>
+                                                <th>Officer Code</th>
+                                                <th>Status</th>
+                                                <th>More Details</th>
+                                        </tr>
+                                </thead>
+
+                                <tbody>
+                                        <ng-container *ngFor="let challan of data.challans | async">
+
+
+                                                <tr *ngIf="auth.getUserType() != 'commuter' || (auth.getUserType() == 'commuter' && (auth.getVehicle() == challan.vehicle.vehicle_plate ||  auth.getLicense() == challan.person_details.dl_no)) ">
+                                                        <td>
+                                                                <a href="{{challan.url}}" target="_blank">URL Link</a>
+                                                        </td>
+                                                        <td>{{challan.date}}</td>
+                                                        <td>
+                                                                <a href="https://www.google.co.in/maps/place/{{challan.location.x}},{{challan.location.y}}" target="_blank">View</a>
+                                                        </td>
+                                                        <td>{{challan.challan_number}}</td>
+                                                        <td>{{challan.offence.code}}</td>
+                                                        <td>{{challan.vehicle.vehicle_plate}}</td>
+                                                        <td>{{challan.person_details.dl_no}}</td>
+                                                        <td>{{challan.officer.badge_number}}</td>
+                                                        <td>{{challan.status}}</td>
+                                                        <td>
+
+
+
+
+                                                                <a (click)="openCh(challan)" class="iconn">
+                                                                        <i class="icon fa-eye fa-2x" title="View"></i>
+                                                                </a>
+
+                                                                <a *ngIf="auth.getUserType() == 'commuter' &&  challan.status != 'paid'" (click)="openPay(challan)" class="iconn">
+                                                                        <i class="icon fa-money fa-2x" title="View"></i>
+                                                                </a>
+
+
+                                                        </td>
+
+                                                </tr>
+                                                
+                                        </ng-container>
+                                        <tr *ngIf="data.challans == null">
+                                                        <td colspan="10" style="text-align:center;">No data to display</td>
+                                                </tr>
+
+
+                                </tbody>
+
+                        </table>
+                </div>
+
+
+
+
+
+        </div>
+
+</section>
+
+
+
+<modal [backdrop]="backdrop" #upload style="margin-top:5%;">
+        <form #uploadForm="ngForm">
+                <modal-header>
+                        <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Upload Image</h4>
+                </modal-header>
+                <modal-body>
+                        <div class="form-group">
+                                <label>Image</label>
+                                <input type="file" accept="image/*" (change)="onChange($event)" />
+                        </div>
+                </modal-body>
+                <modal-footer>
+                        <div style="text-align:left;">
+                                        <span>* For sample images, visit <a href="https://drive.google.com/drive/folders/1g6-VFhQApo65exXSPR4_KV_3EK8dMdT1?usp=sharing" target="_blank">Here</a></span>
+                                        <br>
+                                        <span>** Use only images containing 4 wheeler.</span>
+                        </div>
+                        
+                        <button type="button" class="btn btn-default" (click)="closeUI()">Cancel</button>
+                        <button type="button" class="btn btn-primary" [disabled]="!uploadForm.valid" (click)="Upload()">Upload</button>
+                </modal-footer>
+        </form>
+</modal>
+
+<modal [backdrop]="backdrop" #loading style="margin-top:5%;">
+        <form #modalForm="ngForm">
+
+                <modal-body>
+                        <div class="form-group">
+                                <img src="../assets/images/GD.gif" alt="">
+                        </div>
+                </modal-body>
+
+        </form>
+</modal>
+
+<modal [backdrop]="backdrop" #license style="margin-top:5%;">
+        <form #licenseForm="ngForm">
+                <modal-header>
+                        <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Confirm License Number</h4>
+                </modal-header>
+                <modal-body>
+                        <div class="form-group">
+                                <label>Image</label>
+                                <img src="{{this.challan.url}}" height="100px" width="100px" alt="Pic">
+                                <div class="form-group">
+                                        <label>License Plate</label>
+                                        <select name="licenseNum" id="licenseNum" #t (change)="callType(t.value)" *ngIf="fetchedData.results[0] != undefined">
+                                                <option *ngFor="let plate of fetchedData.results[0].candidates" value="{{plate.plate}}">{{plate.plate}}</option>
+                                        </select>
+                                </div>
+                        </div>
+                </modal-body>
+                <modal-footer>
+                                
+                        <button type="button" class="btn btn-default" (click)="closeLi(); openUI()">Back</button>
+                        <button type="button" class="btn btn-primary" [disabled]="!licenseForm.valid" (click)="proceedLi()">Proceed</button>
+                </modal-footer>
+        </form>
+</modal>
+
+<modal [backdrop]="backdrop" #commuterInfo style="margin-top:5%;">
+        <form #commuterForm="ngForm">
+                <modal-header>
+                        <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Confirm Commuter Data </h4>
+                </modal-header>
+                <modal-body>
+                        <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control" name="Name" required [(ngModel)]=" challan.person_details.name">
+                        </div>
+                        <div class="form-group">
+                                <label>DOB</label>
+                                <input type="date" class="form-control" name="DOB" required [(ngModel)]="challan.person_details.dob">
+                        </div>
+                        <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" class="form-control" name="Address" required [(ngModel)]="challan.person_details.address">
+                        </div>
+                        <div class="form-group">
+                                <label>Contact Number</label>
+                                <input type="number" class="form-control" name="Telephone" required [(ngModel)]="challan.person_details.contact_number">
+                        </div>
+                        <div class="form-group">
+                                <label>Driving License</label>
+                                <input type="text" class="form-control" name="Dl_no" required [(ngModel)]="challan.person_details.dl_no">
+                        </div>
+                        <div class="form-group">
+                                <label>Driver License Expiry</label>
+                                <input type="date" class="form-control" name="Dl_expiry" required [(ngModel)]="challan.person_details.dl_expiry">
+                        </div>
+                        <div class="form-group">
+                                <label>Vehicle License</label>
+                                <input type="text" class="form-control" name="Vehicle_no" [(ngModel)]="challan.vehicle.vehicle_plate" disabled>
+                        </div>
+                </modal-body>
+                <modal-footer>
+                                <div style="text-align:left;">
+                                              
+                                                <span>* If no data is shown, do fill the details.</span>
+                                </div>
+                        <button type="button" class="btn btn-default" (click)="closeCI(); openLi()">Back</button>
+                        <button type="button" class="btn btn-primary" [disabled]="!commuterForm.valid" (click)="proceedCI()">Proceed</button>
+                </modal-footer>
+        </form>
+</modal>
+
+<modal [backdrop]="backdrop" #vehicleInfo style="margin-top:5%;">
+        <form #vehicleForm="ngForm">
+                <modal-header>
+                        <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Confirm Vehicle Data </h4>
+                </modal-header>
+                <modal-body>
+                        <div class="form-group">
+                                <label>Body Type</label>
+                                <select name="bodyType" id="bodyType" #t1 (change)="callTypeBody(t1.value)" *ngIf="fetchedData.results[0] != undefined">
+                                        <option *ngFor="let body of fetchedData.results[0].vehicle.body_type" value="{{body.name}}">{{body.name}}</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                                <label>Color</label>
+                                <select name="colorType" id="colorType" #t2 (change)="callTypeColor(t2.value)" *ngIf="fetchedData.results[0] != undefined">
+                                        <option *ngFor="let color of fetchedData.results[0].vehicle.color" value="{{color.name}}">{{color.name}}</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                                <label>Make</label>
+                                <select name="makeType" id="makeType" #t3 (change)="callTypeMake(t3.value)" *ngIf="fetchedData.results[0] != undefined">
+                                        <option *ngFor="let make of fetchedData.results[0].vehicle.make" value="{{make.name}}">{{make.name}}</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                                <label>Make Model</label>
+                                <select name="modelType" id="modelType" #t4 (change)="callTypeModel(t4.value)" *ngIf="fetchedData.results[0] != undefined">
+                                        <option *ngFor="let make_model of fetchedData.results[0].vehicle.make_model" value="{{make_model.name}}">{{make_model.name}}</option>
+                                </select>
+                        </div>
+                </modal-body>
+                <modal-footer>
+                        <button type="button" class="btn btn-default" (click)="closeV(); openCI()">Back</button>
+                        <button type="button" class="btn btn-primary" [disabled]="!vehicleForm.valid" (click)="proceedV()">Proceed</button>
+                </modal-footer>
+        </form>
+</modal>
+
+<modal [backdrop]="backdrop" #offenceInfo style="margin-top:5%;">
+        <form #offenceForm="ngForm">
+                <modal-header>
+                        <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Enter Offence Data </h4>
+                </modal-header>
+                <modal-body>
+                        <div class="form-group">
+                                <label>Offence Code</label>
+                                <select name="codeType" id="codeType" #t5 (change)="callTypeCode(t5.value)" *ngIf="data.offences != undefined">
+                                        <option *ngFor="let offence of this.data.offences | async" value="{{offence.code}}">{{offence.code}}</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                                <label>Offence Description</label>
+                                <input type="text" class="form-control" name="description" [(ngModel)]="challan.offence.description" readonly disabled>
+
+                        </div>
+                        <div class="form-group">
+                                <label>Offence Point</label>
+                                <input type="number" class="form-control" name="points" [(ngModel)]="challan.offence.points" readonly disabled>
+
+                        </div>
+                        <div class="form-group">
+                                <label>Offence Cost</label>
+                                <input type="number" class="form-control" name="costs" [(ngModel)]="challan.offence.cost" readonly disabled>
+
+                        </div>
+                </modal-body>
+                <modal-footer>
+                        <button type="button" class="btn btn-default" (click)="closeOf(); openV()">Back</button>
+                        <button type="button" class="btn btn-primary" (click)="proceedOf()">Proceed</button>
+                </modal-footer>
+        </form>
+</modal>
+
+<modal [backdrop]="backdrop" #officerInfo style="margin-top:5%;">
+        <form #officerForm="ngForm">
+                <modal-header>
+                        <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Confirm Other Details </h4>
+                </modal-header>
+                <modal-body>
+                        <div class="form-group">
+                                <label>Officer Code</label>
+                                <select name="officerT" id="officerT" #t6 (change)="callTypeOff(t6.value)" *ngIf="data.officers != undefined">
+                                        <option *ngFor="let officer of this.data.officers | async" value="{{officer.badge_number}}">{{officer.badge_number}}</option>
+                                </select>
+                        </div>
+                        <div class="form-group">
+                                <label>Date of Offence</label>
+                                <input type="date" class="form-control" name="offenceDate" (change)="changeS()" [(ngModel)]="challan.date">
+                        </div>
+                        <div class="form-group">
+                                <label>Location (Coordinates)</label>
+                                Latitute:
+                                <input type="number" class="form-control" name="la" [(ngModel)]="challan.location.x"> Longitude:
+                                <input type="number" class="form-control" name="lo" [(ngModel)]="challan.location.y">
+
+                        </div>
+                        <div class="form-group">
+                                <label>Offence Cost</label>
+                                <input type="number" class="form-control" name="costs" [(ngModel)]="challan.offence.cost" readonly disabled>
+
+                        </div>
+
+                        <div class="form-group">
+                                <label>Payment Due Date</label>
+                                <input type="date" class="form-control" name="payDate" [(ngModel)]="challan.payment_due_date" readonly disabled>
+
+                        </div>
+
+                </modal-body>
+                <modal-footer>
+                        <button type="button" class="btn btn-default" (click)="closeOff(); openOf()">Back</button>
+                        <button type="button" class="btn btn-primary" [disabled]="!officerForm.valid" (click)="submit()">Submit</button>
+                </modal-footer>
+        </form>
+</modal>
+
+<modal [backdrop]="backdrop" #payInfo style="margin-top:5%;">
+        <form #payForm="ngForm">
+                <modal-header>
+                        <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">Payment</h4>
+                </modal-header>
+                <modal-body>
+                        <div class="form-group" *ngIf="cur != undefined">
+                                <label>Challan Number</label>
+                                <input type="number" class="form-control" name="cnumber" [(ngModel)]="cur.challan_number" readonly disabled>
+
+                        </div>
+                        <div class="form-group" *ngIf="cur != undefined">
+                                <label>Fine Amount</label>
+                                <input type="number" class="form-control" name="fine" [(ngModel)]="cur.offence.cost" readonly disabled>
+
+                        </div>
+                        <label>Challan Number has been copied to Clipboard.</label>
+
+                </modal-body>
+                <modal-footer style="align-content:center">
+                        <div class="pm-button">
+                                <a href="https://www.payumoney.com/paybypayumoney/#/9794700C987B0684EB25492E16EDC0F5" (click)="pay()">
+                                        <img src="https://www.payumoney.com//media/images/payby_payumoney/buttons/212.png" />
+                                </a>
+                        </div>
+
+                </modal-footer>
+        </form>
+</modal>
+
+<modal [backdrop]="backdrop" #challanInfo style="margin-top:5%;">
+        <form #challanForm="ngForm">
+                <modal-header>
+                        <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">View Challan </h4>
+                </modal-header>
+                <modal-body *ngIf="cur != undefined">
+                        <div class="row">
+                                <div class="6u 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>Challan Number:</strong> {{cur.challan_number}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Challan Status:</strong> {{cur.status}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Image:</strong>
+                                                <a href="{{cur.url}}" target="_blank">Link</a>
+                                        </span>
+                                        <br>
+
+
+                                </div>
+
+                                <div class="6u$ 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>Date:</strong> {{cur.date}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Payment Due Date:</strong> {{cur.payment_due_date}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Location:</strong>
+                                                <a href="https://www.google.co.in/maps/place/{{cur.location.x}},{{cur.location.y}}" target="_blank">View</a>
+                                        </span>
+                                        <br>
+                                </div>
+                        </div>
+                        <br>
+                        
+                        <h3 style="text-align:center;">Vehicle Details</h3>
+
+                        <div class="row">
+                                <div class="6u 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>License Plate Number:</strong> {{cur.vehicle.vehicle_plate}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Color:</strong> {{cur.vehicle.color}}</span>
+                                        <br>
+
+
+
+                                </div>
+
+                                <div class="6u$ 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>Body Type:</strong> {{cur.vehicle.body_type}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Make:</strong> {{cur.vehicle.make}}</span>
+                                        <br>
+                                        <span>
+                                                <strong>Make Model:</strong> {{cur.vehicle.make_model}}
+                                        </span>
+                                        <br>
+                                </div>
+                        </div>
+                        <br>
+                        
+                        <h3 style="text-align:center;">Offender Details</h3>
+
+                        <div class="row">
+                                <div class="6u 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>Name:</strong> {{cur.person_details.name}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>DOB:</strong> {{cur.person_details.dob}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>Address:</strong> {{cur.person_details.address}}
+                                        </span>
+                                        <br>
+
+
+                                </div>
+
+                                <div class="6u$ 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>DL Number:</strong> {{cur.person_details.dl_no}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>DL Expiry Date:</strong> {{cur.person_details.dl_expiry}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>Contact Number:</strong> {{cur.person_details.contact_number}}
+                                        </span>
+                                        <br>
+                                </div>
+                        </div>
+                        <br>
+                        
+                        <h3 style="text-align:center;">Offence Details</h3>
+
+                        <div class="row">
+                                <div class="6u 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>Code:</strong> {{cur.offence.code}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>Description:</strong> {{cur.offence.description}}
+                                        </span>
+                                        <br>
+
+
+
+                                </div>
+
+                                <div class="6u$ 12u$(small)" style="text-align:left;">
+                                        <span>
+                                                <strong>Points:</strong> {{cur.offence.points}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>Cost:</strong> {{cur.offence.cost}}
+                                        </span>
+                                        <br>
+
+                                </div>
+                        </div>
+                        <br>
+                        
+                        <h3 style="text-align:center;">Officer Details</h3>
+
+                        <div class="row">
+                                <div class="6u 12u$(small)" style="text-align:left;">
+                                        <h5>Incharge:</h5>
+                                        <span>
+                                                <strong>Name:</strong> {{cur.officer.name}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>Badge Number:</strong> {{cur.officer.badge_number}}
+                                        </span>
+                                        <br>
+
+
+
+                                </div>
+
+                                <div class="6u$ 12u$(small)" style="text-align:left;">
+                                        <h5>Assigned To</h5>
+                                        <span>
+                                                <strong>Name:</strong> {{cur.assignedto.name}}
+                                        </span>
+                                        <br>
+                                        <span>
+                                                <strong>Badge Number:</strong> {{cur.assignedto.badge_number}}
+                                        </span>
+                                        <br>
+
+                                </div>
+                        </div>
+                        <br>
+                        
+                        
+                        <h3 style="text-align:center;"  *ngIf="cur.court.is_warrant_issued">Court Details</h3>
+                        
+                                                <div class="row" *ngIf="cur.court.is_warrant_issued">
+                                                        <div class="6u 12u$(small)" style="text-align:left;">
+                                                              
+                                                                <span>
+                                                                        <strong>Court Date:</strong> {{cur.court.court_date}}
+                                                                </span>
+                                                                <br>
+                                                                <span>
+                                                                        <strong>Warrant Issued:</strong> {{cur.court.is_warrant_issued}}
+                                                                </span>
+                                                                <br>
+                        
+                        
+                        
+                                                        </div>
+                        
+                                                        <div class="6u$ 12u$(small)" style="text-align:left;">
+                                                               
+                                                                <span>
+                                                                        <strong>Arrest Status:</strong> {{cur.court.arrest_status}}
+                                                                </span>
+                                                                <br>
+                                                               
+                        
+                                                        </div>
+                                                </div>
+                </modal-body>
+                <modal-footer  *ngIf="cur!= undefined  && (auth.getUserType() == 'wireless' || auth.getUserType() == 'police') && cur.status != 'closed'">
+                        <button type="button"  *ngIf="auth.getUserType() == 'wireless'" class="btn btn-default" (click)="closeCh();closeChallan();">Close Challan</button>
+                        <button type="button" *ngIf="auth.getUserType() == 'wireless'" class="btn btn-default" (click)="closeCh();openAs();">Assign Officer</button>
+                        <button type="button" *ngIf="auth.getUserType() == 'wireless' || auth.getUserType() == 'police'" class="btn btn-primary" (click)="closeCh(); openSt();">Change Status</button>
+                </modal-footer>
+        </form>
+</modal>
+
+<modal [backdrop]="backdrop" #assignInfo style="margin-top:5%;">
+                <form #assignForm="ngForm">
+                        <modal-header>
+                                <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                        <span aria-hidden="true">×</span>
+                                </button>
+                                <h4 class="modal-title">Assign Officer </h4>
+                        </modal-header>
+                        <modal-body>
+                                <div class="form-group">
+                                        <label>Officer Code</label>
+                                        <select name="officerA" id="officerA" #t7 (change)="callTypeAss(t7.value)" *ngIf="data.officers != undefined">
+                                                <option *ngFor="let officer of this.data.officers | async" value="{{officer.badge_number}}">{{officer.badge_number}}</option>
+                                        </select>
+                                </div>
+                                       
+                        </modal-body>
+                        <modal-footer>
+                                <button type="button" class="btn btn-default" (click)="closeAs();">Back</button>
+                                <button type="button" class="btn btn-primary" (click)="assigned(); ">Assign</button>
+                        </modal-footer>
+                </form>
+        </modal>
+
+        <modal [backdrop]="backdrop" #statusInfo style="margin-top:5%;">
+                        <form #statusForm="ngForm">
+                                <modal-header>
+                                        <button aria-label="Close" class="close Cusclose" data-dismiss="modal" type="button">
+                                                <span aria-hidden="true">×</span>
+                                        </button>
+                                        <h4 class="modal-title">Change Status </h4>
+                                </modal-header>
+                                <modal-body>
+                                        <div class="form-group">
+                                                <label>Challan Status</label>
+                                                <select name="challanA" id="challanA" #t8 (change)="callTypeSt(t8.value)">
+                                                        <option value="open">Open</option>        
+                                                        <option value="pending">Pending</option>        
+                                                        <option value="paid">Paid</option>        
+                                                                
+                                                </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                                        <label>Arrest Status</label>
+                                                        <select name="courtA" id="courtA" #t9 (change)="callTypeAt(t9.value)">
+                                                                        <option value="none">None</option>        
+                                                                        <option value="arrested">Arrested</option>        
+                                                                        <option value="appeared">Appeared</option>  
+                                                                  </select>
+                                                </div>
+                                               
+                                </modal-body>
+                                <modal-footer>
+                                        <button type="button" class="btn btn-default" (click)="closeSt();">Back</button>
+                                        <button type="button" class="btn btn-primary" (click)="statusC(); ">Change</button>
+                                </modal-footer>
+                        </form>
+                </modal>

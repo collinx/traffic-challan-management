@@ -1,0 +1,129 @@
+		<!-- Header -->
+    <header id="header">
+      <nav class="left">
+        <a href="#menu"><span>Menu</span></a>
+      </nav>
+      <a href="/" class="logo">Traffic Challan Management</a>
+      <nav class="right">
+
+        <a *ngIf="this.auth.getUser() === false" routerLink="/login" class="button alt">Log in</a>
+        <a *ngIf="this.auth.getUser() != false && auth.getUserType() === 'admin'" routerLink="/dashboard" class="button alt">Dashboard</a>
+        <a *ngIf="this.auth.getUser() != false" (click)="this.auth.logout()" class="button alt">Log Out</a>
+      </nav>
+    </header>
+
+  <!-- Menu -->
+    <nav id="menu">
+      <ul class="links">
+        <li><a href="#banner">Home</a></li>
+        <li><a href="#one">About Us</a></li>
+        <li><a href="#footer">Contact Us</a></li>
+      </ul>
+      <ul class="actions vertical">
+        <li><a  *ngIf="this.auth.getUser() === false" routerLink="/login" class="button fit">Login</a>
+          <a  *ngIf="this.auth.getUser() != false && auth.getUserType() === 'admin'" routerLink="/dashboard" class="button fit">Dashboard</a>
+          <a  *ngIf="this.auth.getUser() != false" (click)="this.auth.logout()" class="button fit">Log Out</a>
+        </li>
+      </ul>
+    </nav>
+
+  <!-- Banner -->
+    <section id="banner">
+      <div class="content">
+        <p style="color:white;">Traffic Challan Generation and Management Web App for seemless transactions</p>
+        <ul class="actions">
+          <li><a href="#one" class="button scrolly">Know More</a></li>
+        </ul>
+      </div>
+    </section>
+
+  <!-- One -->
+    <section id="one" class="wrapper">
+      <div class="inner flex flex-3">
+        <div class="flex-item left">
+          <div>
+            <h3>Challan Generation</h3>
+            <p>Generating Challan using <br/> license plate's imageand image processing.</p>
+          </div>
+          <div>
+            <h3>Challan Management</h3>
+            <p>Managing Challan data<br />and query request raised by Offenders.</p>
+          </div>
+        </div>
+        <div class="flex-item image fit round">
+          <img src="../../assets/images/pic01.jpg" alt="" />
+        </div>
+        <div class="flex-item right">
+          <div>
+            <h3>Challan Payment</h3>
+            <p>Payment of Challan by Offenders<br /> via Payment gateway.</p>
+          </div>
+          <div>
+            <h3>Challan Insights</h3>
+            <p>Graphical Display of facts<br /> and data regarding Traffic Challans</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <!-- Two -->
+    <section id="two" class="wrapper style1 special">
+      <div class="inner">
+        <h2>Traffic Citation</h2>
+        <figure>
+            <blockquote>
+              “Traffic congestion is caused by vehicles, not by people in themselves.” 
+            </blockquote>
+            <footer>
+                <cite class="author">Jane Jacobs</cite>
+                <cite class="company">The Death and Life of Great American Cities</cite>
+            </footer>
+        </figure>
+      </div>
+    </section>
+
+  <!-- Three -->
+    <section id="three" class="wrapper">
+      <div class="inner flex flex-3">
+        <div class="flex-item box">
+          <div class="image fit">
+            <img src="../../assets/images/pic02.jpg" height="200px" alt="" />
+          </div>
+          <div class="content">
+            <h3>Consequat</h3>
+            <p>Placerat ornare. Pellentesque od sed euismod in, pharetra ltricies edarcu cas consequat.</p>
+          </div>
+        </div>
+        <div class="flex-item box">
+          <div class="image fit">
+            <img src="../../assets/images/pic03.jpg"  height="200px" alt="" />
+          </div>
+          <div class="content">
+            <h3>Adipiscing</h3>
+            <p>Morbi in sem quis dui placerat Pellentesque odio nisi, euismod pharetra lorem ipsum.</p>
+          </div>
+        </div>
+        <div class="flex-item box">
+          <div class="image fit">
+            <img src="../../assets/images/pic04.jpg"  height="200px" alt="" />
+          </div>
+          <div class="content">
+            <h3>Malesuada</h3>
+            <p>Nam dui mi, tincidunt quis, accu an porttitor, facilisis luctus que metus vulputate sem magna.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <!-- Footer -->
+    <footer id="footer">
+      <div class="inner">
+        <h2>Get In Touch</h2>
+        <ul class="actions">
+          <li><span class="icon fa-phone"></span> <a href="#">(012) 345-6789</a></li>
+          <li><span class="icon fa-envelope"></span> <a href="#">information@tchallan.com</a></li>
+          <li><span class="icon fa-map-marker"></span> 123 Somewhere Road, Jaipur, IN 012345</li>
+        </ul>
+      </div>
+      
+    </footer>
